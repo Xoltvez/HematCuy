@@ -14,8 +14,18 @@ class TransactionController extends Controller
     {
         $transactions = auth()->user()->transactions()->orderBy('date', 'desc')->orderBy('created_at', 'desc')->get();
         
-        $totalIncome = $transactions->where('type', 'income')->sum('amount');
-        $totalExpense = $transactions->where('type', 'expense')->sum('amount');
+        $currentMonth = now()->format('Y-m');
+        $monthlyTransactions = $transactions->filter(function($tx) use ($currentMonth) {
+            return \Carbon\Carbon::parse($tx->date)->format('Y-m') === $currentMonth;
+        });
+
+        $totalIncome = $monthlyTransactions->where('type', 'income')->sum('amount');
+        $totalExpense = $monthlyTransactions->where('type', 'expense')->sum('amount');
+        
+        $today = now()->format('Y-m-d');
+        $todayExpense = $transactions->filter(function($tx) use ($today) {
+            return \Carbon\Carbon::parse($tx->date)->format('Y-m-d') === $today;
+        })->where('type', 'expense')->sum('amount');
         
         $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->sum('amount') 
                      - $transactions->where('account', 'cash')->where('type', 'expense')->sum('amount');
@@ -23,7 +33,7 @@ class TransactionController extends Controller
         $balanceBank = $transactions->where('account', 'bank')->where('type', 'income')->sum('amount') 
                      - $transactions->where('account', 'bank')->where('type', 'expense')->sum('amount');
 
-        return view('dashboard', compact('transactions', 'totalIncome', 'totalExpense', 'balanceCash', 'balanceBank'));
+        return view('dashboard', compact('transactions', 'totalIncome', 'totalExpense', 'todayExpense', 'balanceCash', 'balanceBank'));
     }
 
     public function report(\Illuminate\Http\Request $request)
@@ -36,8 +46,19 @@ class TransactionController extends Controller
         if ($request->filled('end_date')) {
             $query->where('date', '<=', $request->end_date);
         }
+        if ($request->filled('year')) {
+            $query->whereYear('date', $request->year);
+        }
+        if ($request->filled('month')) {
+            $query->whereMonth('date', $request->month);
+        }
 
         $transactions = $query->get();
+
+        // Get unique years for the dropdown
+        $availableYears = auth()->user()->transactions()->pluck('date')->map(function($date) {
+            return \Carbon\Carbon::parse($date)->format('Y');
+        })->unique()->sortDesc()->values();
         
         $totalIncome = $transactions->where('type', 'income')->sum('amount');
         $totalExpense = $transactions->where('type', 'expense')->sum('amount');
@@ -68,7 +89,7 @@ class TransactionController extends Controller
                 ];
             });
 
-        return view('report', compact('transactions', 'totalIncome', 'totalExpense', 'balanceCash', 'balanceBank', 'expensesByCategory', 'incomesByCategory'));
+        return view('report', compact('transactions', 'totalIncome', 'totalExpense', 'balanceCash', 'balanceBank', 'expensesByCategory', 'incomesByCategory', 'availableYears'));
     }
 
     /**
@@ -96,6 +117,33 @@ class TransactionController extends Controller
 
         $validated['user_id'] = auth()->id();
         Transaction::create($validated);
+
+        if ($validated['type'] === 'expense') {
+            $user = auth()->user();
+            if ($user->daily_budget > 0) {
+                $txDate = \Carbon\Carbon::parse($validated['date'])->format('Y-m-d');
+                $today = now()->format('Y-m-d');
+                
+                if ($txDate === $today) {
+                    $todayExpense = \App\Models\Transaction::where('user_id', $user->id)
+                        ->where('type', 'expense')
+                        ->whereDate('date', $today)
+                        ->sum('amount');
+                    
+                    if ($todayExpense > $user->daily_budget) {
+                        if ($user->daily_alert_sent_at !== $today) {
+                            try {
+                                \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\DailyBudgetAlertMail($user, $todayExpense, $user->daily_budget));
+                                $user->daily_alert_sent_at = $today;
+                                $user->save();
+                            } catch (\Exception $e) {
+                                \Illuminate\Support\Facades\Log::error('Gagal mengirim email budget: ' . $e->getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return redirect()->route('dashboard')->with('success', 'Transaksi berhasil ditambahkan!');
     }
@@ -153,5 +201,18 @@ class TransactionController extends Controller
         }
         $transaction->delete();
         return redirect()->route('dashboard')->with('success', 'Transaksi berhasil dihapus!');
+    }
+
+    public function updateBudget(Request $request)
+    {
+        $request->validate([
+            'daily_budget' => 'nullable|numeric|min:0'
+        ]);
+
+        $user = auth()->user();
+        $user->daily_budget = $request->daily_budget;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Batas anggaran harian berhasil diperbarui!');
     }
 }

@@ -21,11 +21,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [TransactionController::class, 'index'])->name('dashboard');
+    Route::get('/kalkulator', function() { return view('calculator'); })->name('calculator');
     Route::get('/laporan', [TransactionController::class, 'report'])->name('report');
     Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/transactions/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
     Route::put('/transactions/{transaction}', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    Route::post('/budget', [TransactionController::class, 'updateBudget'])->name('budget.update');
 
     Route::resource('notes', NoteController::class)->except(['create', 'show']);
 

@@ -16,6 +16,32 @@
 <!-- Date Filter Form -->
 <form action="{{ route('report') }}" method="GET" style="margin-bottom: 2rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label for="year" style="font-size: 0.875rem; color: var(--text-muted);">Pilih Tahun</label>
+        <select name="year" id="year" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+            <option value="">Semua Tahun</option>
+            @foreach($availableYears as $y)
+                <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label for="month" style="font-size: 0.875rem; color: var(--text-muted);">Pilih Bulan</label>
+        <select name="month" id="month" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+            <option value="">Semua Bulan</option>
+            @php
+                $months = [
+                    '01' => 'Januari', '02' => 'Februari', '03' => 'Maret',
+                    '04' => 'April', '05' => 'Mei', '06' => 'Juni',
+                    '07' => 'Juli', '08' => 'Agustus', '09' => 'September',
+                    '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                ];
+            @endphp
+            @foreach($months as $num => $name)
+                <option value="{{ $num }}" {{ request('month') == $num ? 'selected' : '' }}>{{ $name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
         <label for="start_date" style="font-size: 0.875rem; color: var(--text-muted);">Dari Tanggal</label>
         <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
     </div>
@@ -25,7 +51,7 @@
     </div>
     <div style="display: flex; gap: 0.5rem;">
         <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.5rem;">Filter</button>
-        @if(request('start_date') || request('end_date'))
+        @if(request('start_date') || request('end_date') || request('year') || request('month'))
             <a href="{{ route('report') }}" class="btn" style="padding: 0.5rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--text-main); text-decoration: none; display: inline-block; text-align: center;">Reset</a>
         @endif
     </div>
@@ -59,11 +85,11 @@
             </div>
         </div>
         
-        <h3 style="margin-bottom: 1.5rem;">Rincian kategori</h3>
+        <h3 class="report-chart-header" style="margin-bottom: 1.5rem;">Rincian kategori</h3>
         
         <div class="report-content-layout">
             <!-- Chart Container -->
-            <div style="width: 100%; max-width: 350px; margin: 0 auto; position: relative; aspect-ratio: 1;">
+            <div class="chart-container" style="width: 100%; max-width: 350px; margin: 0 auto; position: relative; aspect-ratio: 1;">
                 <canvas id="categoryChart"></canvas>
             </div>
 
@@ -300,4 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
 @endsection

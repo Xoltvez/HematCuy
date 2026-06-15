@@ -19,6 +19,22 @@
 </div>
 @endif
 
+@if($todayExpense > 0)
+<div class="alert" style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: #fecdd3; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fb7185;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+    <div>
+        <strong>Info Harian:</strong> Anda sudah mengeluarkan <strong>Rp {{ number_format($todayExpense, 0, ',', '.') }}</strong> hari ini. Tetap hemat, ya!
+    </div>
+</div>
+@else
+<div class="alert" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #d1fae5; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #34d399;"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    <div>
+        <strong>Hebat!</strong> Belum ada pengeluaran hari ini. Pertahankan isi dompet Anda!
+    </div>
+</div>
+@endif
+
 <div class="summary-cards">
         <div class="card balance-card" style="border-left: 4px solid #60a5fa;">
             <h3>Saldo Tunai (Cash)</h3>
@@ -29,11 +45,11 @@
             <p class="amount">Rp {{ number_format($balanceBank, 2, ',', '.') }}</p>
         </div>
     <div class="card income-card">
-        <h3>Total Pemasukan</h3>
+        <h3>Pemasukan Bulan Ini</h3>
         <p class="amount">Rp {{ number_format($totalIncome, 2, ',', '.') }}</p>
     </div>
     <div class="card expense-card">
-        <h3>Total Pengeluaran</h3>
+        <h3>Pengeluaran Bulan Ini</h3>
         <p class="amount">Rp {{ number_format($totalExpense, 2, ',', '.') }}</p>
     </div>
 </div>
@@ -41,6 +57,18 @@
 <div class="dashboard-grid">
     <!-- Transaction Form -->
     <div class="transaction-form-section">
+        <div style="background: rgba(167, 139, 250, 0.1); border: 1px solid rgba(167, 139, 250, 0.2); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+            <h4 style="margin-top: 0; margin-bottom: 0.5rem; color: #a78bfa; font-size: 1rem;">Target Pengeluaran Harian</h4>
+            <form action="{{ route('budget.update') }}" method="POST" style="display: flex; gap: 0.5rem; align-items: flex-start; flex-wrap: wrap;">
+                @csrf
+                <div style="flex: 1; min-width: 200px;">
+                    <input type="number" name="daily_budget" value="{{ auth()->user()->daily_budget ? (int) auth()->user()->daily_budget : '' }}" placeholder="Contoh: 50000" style="width: 100%; padding: 0.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" min="0">
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">Kosongkan jika tidak ingin ada email peringatan.</small>
+                </div>
+                <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Simpan Target</button>
+            </form>
+        </div>
+
         <h3>Tambah Transaksi Baru</h3>
         <form action="{{ route('transactions.store') }}" method="POST" class="transaction-form">
             @csrf
@@ -50,13 +78,14 @@
             </div>
             
             <div class="form-group">
-                <label for="amount">Jumlah (Rp)</label>
-                <input type="number" id="amount" name="amount" required min="0" step="any" placeholder="0">
+                <label for="amount_display">Jumlah (Rp)</label>
+                <input type="text" id="amount_display" required placeholder="0" oninput="formatCurrency(this)">
+                <input type="hidden" id="amount" name="amount" required min="0" step="any" value="0">
                 <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
-                    <button type="button" class="btn-quick-amount" onclick="document.getElementById('amount').value = (Number(document.getElementById('amount').value) || 0) + 10000">+10 Ribu</button>
-                    <button type="button" class="btn-quick-amount" onclick="document.getElementById('amount').value = (Number(document.getElementById('amount').value) || 0) + 50000">+50 Ribu</button>
-                    <button type="button" class="btn-quick-amount" onclick="document.getElementById('amount').value = (Number(document.getElementById('amount').value) || 0) + 100000">+100 Ribu</button>
-                    <button type="button" class="btn-quick-amount" onclick="document.getElementById('amount').value = 0" style="color: var(--color-expense); border-color: rgba(244, 63, 94, 0.3);">Reset</button>
+                    <button type="button" class="btn-quick-amount" onclick="addAmount(10000)">+10 Ribu</button>
+                    <button type="button" class="btn-quick-amount" onclick="addAmount(50000)">+50 Ribu</button>
+                    <button type="button" class="btn-quick-amount" onclick="addAmount(100000)">+100 Ribu</button>
+                    <button type="button" class="btn-quick-amount" onclick="setAmount(0)" style="color: var(--color-expense); border-color: rgba(244, 63, 94, 0.3);">Reset</button>
                 </div>
             </div>
 
@@ -269,5 +298,26 @@ document.addEventListener('DOMContentLoaded', function() {
         updateBalanceVisibility();
     });
 });
+
+function formatCurrency(input) {
+    let value = input.value.replace(/\D/g, '');
+    document.getElementById('amount').value = value || 0;
+    if (value) {
+        input.value = new Intl.NumberFormat('id-ID').format(value);
+    } else {
+        input.value = '';
+    }
+}
+
+function addAmount(val) {
+    let current = Number(document.getElementById('amount').value) || 0;
+    let total = current + val;
+    setAmount(total);
+}
+
+function setAmount(val) {
+    document.getElementById('amount').value = val;
+    document.getElementById('amount_display').value = val == 0 ? '' : new Intl.NumberFormat('id-ID').format(val);
+}
 </script>
 @endsection

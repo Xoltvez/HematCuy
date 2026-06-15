@@ -7,6 +7,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4'/><path d='M4 6v12c0 1.1.9 2 2 2h14v-4'/><path d='M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z'/></svg>">
+    <style>
+        .mobile-menu-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            margin-right: 0.5rem;
+        }
+        .icon-hamburger, .icon-close {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -12px;
+            margin-left: -12px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+        .icon-close {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+        .mobile-menu-btn.is-active .icon-hamburger {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+        .mobile-menu-btn.is-active .icon-close {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -18,8 +46,9 @@
                 <h1>HematCuy</h1>
             </div>
 
-            <button class="mobile-menu-btn header-item-hamburger" onclick="document.getElementById('main-nav').classList.toggle('show')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <button class="mobile-menu-btn header-item-hamburger" onclick="document.getElementById('main-nav').classList.toggle('show'); this.classList.toggle('is-active')">
+                <svg class="icon-hamburger" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
 
             <nav id="main-nav" class="nav-container header-item-nav">
@@ -28,6 +57,7 @@
                 <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dasbor</a>
                 <a href="{{ route('report') }}" class="nav-link {{ request()->routeIs('report') ? 'active' : '' }}">Laporan</a>
                 <a href="{{ route('notes.index') }}" class="nav-link {{ request()->routeIs('notes.*') ? 'active' : '' }}">Catatan</a>
+                <a href="{{ route('calculator') }}" class="nav-link {{ request()->routeIs('calculator') ? 'active' : '' }}">Kalkulator</a>
                 <a href="{{ route('splitbill.index') }}" class="nav-link {{ request()->routeIs('splitbill.*') ? 'active' : '' }}" style="display: flex; align-items: center; gap: 0.25rem;">
                     Bagi Tagihan <span style="background: rgba(167, 139, 250, 0.2); color: #a78bfa; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 4px; font-weight: bold;">AI</span>
                 </a>
