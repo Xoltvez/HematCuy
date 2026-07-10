@@ -1,57 +1,225 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
 
-@section('title', 'Verifikasi OTP - HematCuy')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi OTP - HematCuy</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4'/%3E%3Cpath d='M4 6v12c0 1.1.9 2 2 2h14v-4'/%3E%3Cpath d='M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-@section('content')
-<div class="auth-container" style="max-width: 400px; margin: 2rem auto; padding: 2rem; background: var(--surface-color); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-md);">
-    
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #2563eb, #60a5fa); -webkit-background-clip: text; color: transparent;">Verifikasi OTP</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">
-            Masukkan 6 digit kode yang telah kami kirimkan ke email <strong>{{ session('otp_email') }}</strong>
-        </p>
-    </div>
+        body {
+            background-color: #050505;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle at center, #111827 0%, #050505 100%);
+            padding: 1rem;
+        }
 
-    @if (session('success'))
-        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #10b981; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        .card {
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3.5rem 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .logo-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+        }
+
+        .title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: #a1a1aa;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            font-size: 1.5rem;
+            letter-spacing: 0.5rem;
+            text-align: center;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .form-control::placeholder {
+            color: #52525b;
+            letter-spacing: 0.5rem;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .back-link {
+            color: #a1a1aa;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        .resend-btn {
+            background: transparent;
+            border: none;
+            color: #60a5fa;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .resend-btn:hover {
+            color: #93c5fd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <a href="/" class="logo-nav">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4" />
+                <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
+                <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z" />
+            </svg>
+            HematCuy
+        </a>
+
+        <h2 class="title">Verifikasi OTP 🔐</h2>
+        <p class="subtitle">Masukkan 6 digit kode yang telah kami kirimkan ke email <br><strong>{{ session('otp_email') ?? 'Anda' }}</strong></p>
+
+        @if (session('success'))
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; text-align: left;">
             {{ session('success') }}
         </div>
-    @endif
+        @endif
 
-    @if ($errors->any())
-        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        @if ($errors->any())
+        <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: #f43f5e; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; text-align: left;">
             @foreach ($errors->all() as $error)
-                <p style="margin: 0;">{{ $error }}</p>
+            <p style="margin: 0;">{{ $error }}</p>
             @endforeach
         </div>
-    @endif
+        @endif
 
-    <form method="POST" action="{{ route('otp.verify.submit') }}">
-        @csrf
-        
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-            <label for="otp_code" style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; text-align: center;">Kode OTP</label>
-            <input id="otp_code" type="text" name="otp_code" required autofocus maxlength="6" pattern="\d{6}" placeholder="123456" 
-                style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.5); color: white; font-size: 1.5rem; letter-spacing: 0.5rem; text-align: center;">
+        <form method="POST" action="{{ route('otp.verify.submit') }}">
+            @csrf
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="otp_code">Kode OTP</label>
+                <input id="otp_code" type="text" name="otp_code" required autofocus maxlength="6" pattern="\d{6}" placeholder="123456" class="form-control">
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Verifikasi Akun
+            </button>
+        </form>
+
+        <form method="POST" action="{{ route('otp.resend') }}" style="margin-bottom: 1.5rem;">
+            @csrf
+            <p style="color: #a1a1aa; font-size: 0.9rem; margin-bottom: 0.5rem;">Tidak menerima email atau kode kedaluwarsa?</p>
+            <button type="submit" class="resend-btn">
+                Kirim Ulang Kode OTP
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+            <a href="{{ route('login') }}" class="back-link">
+                &larr; Kembali ke halaman login
+            </a>
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); font-weight: 600;">
-            Verifikasi Akun
-        </button>
-    </form>
-    
-    <form method="POST" action="{{ route('otp.resend') }}" style="margin-top: 1.5rem; text-align: center;">
-        @csrf
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">Tidak menerima email atau kode kedaluwarsa?</p>
-        <button type="submit" style="background: transparent; border: none; color: #60a5fa; cursor: pointer; text-decoration: underline; font-size: 0.85rem;">
-            Kirim Ulang Kode OTP
-        </button>
-    </form>
-    
-    <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-        <a href="{{ route('login') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s ease;">
-            &larr; Kembali ke Login
-        </a>
     </div>
-</div>
-@endsection
+
+    @include('components.toast')
+</body>
+
+</html>

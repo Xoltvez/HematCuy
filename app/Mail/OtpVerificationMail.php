@@ -40,7 +40,7 @@ class OtpVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.otp_verification',
+            view: 'emails.otp_verification',
             with: [
                 'otpCode' => $this->otpCode,
             ]

@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    protected $fillable = ['title', 'content', 'user_id'];
+    protected $fillable = [
+        'user_id',
+        'title',
+        'content',
+        'amount',
+        'is_paid',
+        'due_date'
+    ];
 
     public function user()
     {

@@ -6,6 +6,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\ResetPasswordMail;
+use Carbon\Carbon;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -21,7 +27,17 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($credentials, $request->has('remember'))) {
+            $user = Auth::user();
+
+            // Cegah login hanya jika user baru mendaftar dan belum verifikasi (masih memiliki otp_code)
+            // Ini agar akun-akun lama yang mendaftar sebelum sistem OTP dibuat tetap bisa login.
+            if (!is_null($user->otp_code)) {
+                Auth::logout();
+                session(['otp_email' => $user->email]);
+                return redirect()->route('otp.verify')->with('success', 'Silakan verifikasi akun Anda terlebih dahulu untuk melanjutkan.');
+            }
+
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali!');
         }
@@ -40,9 +56,31 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
         ]);
+
+        $existingUser = User::where('email', $request->email)->first();
+
+        if ($existingUser) {
+            if (!is_null($existingUser->otp_code)) {
+                // User belum verifikasi OTP, perbarui data & kirim ulang OTP
+                $otpCode = sprintf("%06d", mt_rand(1, 999999));
+                $existingUser->update([
+                    'name' => $request->name,
+                    'password' => Hash::make($request->password),
+                    'otp_code' => $otpCode,
+                    'otp_expires_at' => now()->addMinutes(10),
+                ]);
+
+                \Illuminate\Support\Facades\Mail::to($existingUser->email)->send(new \App\Mail\OtpVerificationMail($otpCode));
+                session(['otp_email' => $existingUser->email]);
+
+                return redirect()->route('otp.verify')->with('success', 'Akun Anda telah terdaftar namun belum diverifikasi. Kode OTP baru telah dikirimkan ke email Anda.');
+            } else {
+                return back()->withErrors(['email' => 'Alamat Email sudah terdaftar. Silakan gunakan yang lain.'])->withInput();
+            }
+        }
 
         $otpCode = sprintf("%06d", mt_rand(1, 999999));
 
@@ -146,5 +184,79 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function showChangePasswordForm()
+    {
+        return view('profile.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password berhasil diubah.');
+    }
+
+    public function showLinkRequestForm()
+    {
+        return view('auth.passwords.email');
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email'], [
+            'email.exists' => 'Kami tidak dapat menemukan pengguna dengan alamat email tersebut.'
+        ]);
+
+        $token = Str::random(64);
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            ['token' => $token, 'created_at' => Carbon::now()]
+        );
+
+        Mail::to($request->email)->send(new ResetPasswordMail($token));
+
+        return back()->with('success', 'Kami telah mengirimkan tautan atur ulang password ke email Anda!');
+    }
+
+    public function showResetForm($token)
+    {
+        return view('auth.passwords.reset', ['token' => $token]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'token' => 'required'
+        ]);
+
+        $resetData = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->first();
+
+        if (!$resetData) {
+            return back()->withErrors(['email' => 'Token atur ulang password tidak valid.']);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        return redirect()->route('login')->with('success', 'Password Anda telah berhasil diubah! Silakan login dengan password baru.');
     }
 }

@@ -50,4 +50,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class);
     }
+
+    public function allocations()
+    {
+        return $this->hasMany(Allocation::class);
+    }
+
+    public function monthlySalaries()
+    {
+        return $this->hasMany(MonthlySalary::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

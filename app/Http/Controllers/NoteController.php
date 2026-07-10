@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class NoteController extends Controller
@@ -32,7 +33,13 @@ class NoteController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
+            'amount' => 'nullable|string',
+            'due_date' => 'nullable|date'
         ]);
+
+        if (isset($validated['amount'])) {
+            $validated['amount'] = (float) str_replace(['Rp', '.', ' '], '', $validated['amount']);
+        }
 
         $validated['user_id'] = auth()->id();
         Note::create($validated);
@@ -68,12 +75,18 @@ class NoteController extends Controller
             abort(403);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
+            'amount' => 'nullable|string',
+            'due_date' => 'nullable|date'
         ]);
 
-        $note->update($request->all());
+        if (isset($validated['amount'])) {
+            $validated['amount'] = (float) str_replace(['Rp', '.', ' '], '', $validated['amount']);
+        }
+
+        $note->update($validated);
 
         return redirect()->route('notes.index')->with('success', 'Catatan berhasil diperbarui!');
     }
@@ -89,5 +102,39 @@ class NoteController extends Controller
         $note->delete();
 
         return redirect()->route('notes.index')->with('success', 'Catatan berhasil dihapus!');
+    }
+
+    public function pay(Request $request, Note $note)
+    {
+        if ($note->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($note->is_paid) {
+            return back()->with('error', 'Catatan ini sudah lunas.');
+        }
+
+        $request->validate([
+            'type' => 'required|in:income,expense',
+            'category' => 'required|string',
+            'account' => 'required|in:cash,bank',
+        ]);
+
+        // Create transaction
+        Transaction::create([
+            'user_id' => auth()->id(),
+            'title' => $note->title,
+            'type' => $request->type,
+            'category' => $request->category,
+            'amount' => $note->amount,
+            'date' => now()->format('Y-m-d'),
+            'account' => $request->account,
+            'description' => 'Pembayaran otomatis dari catatan'
+        ]);
+
+        // Mark note as paid
+        $note->update(['is_paid' => true]);
+
+        return redirect()->route('notes.index')->with('success', 'Catatan berhasil dibayar dan transaksi telah dicatat!');
     }
 }
