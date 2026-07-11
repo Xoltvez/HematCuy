@@ -73,6 +73,7 @@ class SettingsController extends Controller
             $user->allocations()->delete();
             $user->monthlySalaries()->delete();
             $user->wishlists()->delete();
+            $user->debts()->delete();
 
             // Reset profil terkait budgeting
             $user->update([

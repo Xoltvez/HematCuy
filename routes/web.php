@@ -71,6 +71,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('notes', NoteController::class)->except(['create', 'show']);
     Route::post('/notes/{note}/pay', [NoteController::class, 'pay'])->name('notes.pay');
 
+    // Hutang Piutang
+    Route::get('/debts', [App\Http\Controllers\DebtController::class, 'index'])->name('debts.index');
+    Route::post('/debts', [App\Http\Controllers\DebtController::class, 'store'])->name('debts.store');
+    Route::post('/debts/{debt}/pay', [App\Http\Controllers\DebtController::class, 'pay'])->name('debts.pay');
+    Route::delete('/debts/{debt}', [App\Http\Controllers\DebtController::class, 'destroy'])->name('debts.destroy');
+
     // Tabungan & Wishlist
     Route::get('/tabungan', [App\Http\Controllers\WishlistController::class, 'index'])->name('wishlists.index');
     Route::post('/tabungan', [App\Http\Controllers\WishlistController::class, 'store'])->name('wishlists.store');
