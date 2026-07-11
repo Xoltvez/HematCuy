@@ -265,10 +265,9 @@
     /* Hero Search */
     .guide-hero {
         text-align: left;
-        padding: 2rem 1rem 3rem 1rem;
-        background: linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
-        border-radius: var(--radius-xl);
-        margin-bottom: 2rem;
+        padding: 0 0 2rem 0;
+        background: transparent;
+        margin-bottom: 1rem;
     }
     
     .hero-title {
@@ -282,7 +281,7 @@
     .hero-subtitle {
         color: var(--text-muted);
         font-size: 1.05rem;
-        margin: 0 0 2.5rem 0;
+        margin: 0 0 1.5rem 0;
     }
     
     .search-container {
@@ -301,16 +300,15 @@
     
     .search-input {
         width: 100%;
-        padding: 1.25rem 1.5rem 1.25rem 3.5rem;
-        border-radius: 50px;
+        padding: 1rem 1.5rem 1rem 3.25rem;
+        border-radius: 16px;
         border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(15, 23, 42, 0.6);
+        background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         color: #fff;
-        font-size: 1.05rem;
+        font-size: 1rem;
         transition: all 0.3s;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     
     .search-input:focus {
