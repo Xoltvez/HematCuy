@@ -300,7 +300,7 @@
     
     .search-input {
         width: 100%;
-        padding: 1rem 1.5rem 1rem 3.5rem;
+        padding: 1rem 1.5rem 1rem 3.5rem !important;
         border-radius: 16px;
         border: 1px solid rgba(255,255,255,0.1);
         background: rgba(255, 255, 255, 0.03);
