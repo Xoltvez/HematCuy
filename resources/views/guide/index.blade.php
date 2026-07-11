@@ -225,7 +225,7 @@
 <style>
     /* Hero Search */
     .guide-hero {
-        text-align: center;
+        text-align: left;
         padding: 3rem 1rem 4rem 1rem;
         background: linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
         border-radius: var(--radius-xl);
@@ -248,7 +248,7 @@
     
     .search-container {
         max-width: 600px;
-        margin: 0 auto;
+        margin: 0;
         position: relative;
     }
     
