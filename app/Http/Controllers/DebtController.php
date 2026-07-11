@@ -48,21 +48,22 @@ class DebtController extends Controller
                 'account' => $request->account,
             ]);
 
-            // Jika "payable" (Saya meminjam uang/Hutang), maka uang MASUK ke saldo saya.
-            // Jika "receivable" (Saya meminjamkan uang/Piutang), maka uang KELUAR dari saldo saya.
-            Transaction::create([
-                'user_id' => $user->id,
-                'type' => $request->type === 'payable' ? 'income' : 'expense',
-                'amount' => $request->amount,
-                'title' => ($request->type === 'payable' ? 'Pinjaman dari ' : 'Pinjaman ke ') . $request->person_name,
-                'category' => 'Hutang/Piutang',
-                'account' => $request->account,
-                'date' => now(),
-            ]);
+            // Jika "affect_balance" dicentang, buat transaksi awal
+            if ($request->has('affect_balance')) {
+                Transaction::create([
+                    'user_id' => $user->id,
+                    'type' => $request->type === 'payable' ? 'income' : 'expense',
+                    'amount' => $request->amount,
+                    'title' => ($request->type === 'payable' ? 'Pinjaman dari ' : 'Pinjaman ke ') . $request->person_name,
+                    'category' => 'Hutang/Piutang',
+                    'account' => $request->account,
+                    'date' => now(),
+                ]);
+            }
 
             DB::commit();
 
-            return redirect()->route('debts.index')->with('success', 'Catatan hutang/piutang berhasil ditambahkan dan saldo telah diperbarui.');
+            return redirect()->route('debts.index')->with('success', 'Catatan hutang/piutang berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('debts.index')->with('error', 'Terjadi kesalahan saat menyimpan data.');
