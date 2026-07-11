@@ -330,24 +330,6 @@
     </div>
 </div>
 
-<!-- Modal Hapus -->
-<div class="modal-overlay" id="deleteDebtModal">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
-        <div style="margin-bottom: 1.5rem; color: #ef4444;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-        </div>
-        <h3 style="margin-bottom: 1rem; color: white;">Hapus Catatan?</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
-            Apakah Anda yakin ingin menghapus catatan ini? Menghapus catatan tidak akan mengembalikan saldo transaksi yang sudah tercatat.
-        </p>
-        <form id="deleteDebtForm" method="POST" style="display: flex; gap: 1rem; justify-content: center;">
-            @csrf
-            @method('DELETE')
-            <button type="button" class="btn btn-outline" onclick="closeDeleteModal()" style="flex: 1; padding: 0.75rem;">Batal</button>
-            <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.75rem; background: #ef4444; border-color: #ef4444; color: white;">Ya, Hapus</button>
-        </form>
-    </div>
-</div>
 
 <script>
     function formatRupiah(input, hiddenId) {
@@ -394,14 +376,6 @@
         document.getElementById('payDebtModal').classList.remove('active');
     }
 
-    function openDeleteModal(actionUrl) {
-        document.getElementById('deleteDebtForm').action = actionUrl;
-        document.getElementById('deleteDebtModal').classList.add('active');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteDebtModal').classList.remove('active');
-    }
 
     // Close modal when clicking outside
     document.querySelectorAll('.modal-overlay').forEach(modal => {
