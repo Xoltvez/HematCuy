@@ -27,6 +27,9 @@ class User extends Authenticatable
         'daily_budget',
         'daily_alert_sent_at',
         'profile_photo_path',
+        'alert_daily_budget',
+        'alert_weekly_report',
+        'alert_email',
     ];
 
     /**

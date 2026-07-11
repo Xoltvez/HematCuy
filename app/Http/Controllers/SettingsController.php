@@ -44,6 +44,22 @@ class SettingsController extends Controller
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui.');
     }
 
+    public function updateNotifications(Request $request)
+    {
+        $user = auth()->user();
+        $key = $request->input('key');
+        $value = filter_var($request->input('value'), FILTER_VALIDATE_BOOLEAN);
+
+        $allowedKeys = ['alert_daily_budget', 'alert_weekly_report', 'alert_email'];
+
+        if (in_array($key, $allowedKeys)) {
+            $user->update([$key => $value]);
+            return response()->json(['success' => true, 'message' => 'Pengaturan berhasil disimpan.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Key tidak valid.'], 400);
+    }
+
     public function resetAccount(Request $request)
     {
         $user = auth()->user();

@@ -98,7 +98,7 @@
                             <p>Notifikasi saat pengeluaran mendekati atau melewati batas harian.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="toggle_daily_budget" {{ auth()->user()->alert_daily_budget ? 'checked' : '' }} onchange="updateSetting('alert_daily_budget', this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -109,7 +109,7 @@
                             <p>Pemberitahuan ringkasan keuangan setiap akhir pekan.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="toggle_weekly_report" {{ auth()->user()->alert_weekly_report ? 'checked' : '' }} onchange="updateSetting('alert_weekly_report', this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -120,7 +120,7 @@
                             <p>Kirim ringkasan laporan dan peringatan melalui email.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox">
+                            <input type="checkbox" id="toggle_email" {{ auth()->user()->alert_email ? 'checked' : '' }} onchange="updateSetting('alert_email', this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -231,6 +231,7 @@
                             </h4>
                             <p style="margin-bottom: 1rem;">Reset semua aktivitas di akun Anda (Transaksi, Tabungan, Budget, dan Catatan akan dihapus permanen). Akun Anda sendiri tidak akan terhapus.</p>
                             
+
                             <button type="button" class="btn btn-danger" onclick="showResetModal()">
                                 Reset Aktivitas Akun
                             </button>
@@ -717,6 +718,40 @@
             
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    function confirmReset() {
+        if (confirm('PERINGATAN: Semua data transaksi, catatan, dan alokasi Anda akan dihapus permanen. Apakah Anda yakin ingin memulai dari awal?')) {
+            document.getElementById('reset-form').submit();
+        }
+    }
+
+    // Notification Settings AJAX
+    function updateSetting(key, value) {
+        fetch('{{ route("settings.notifications") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                key: key,
+                value: value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Pengaturan disimpan!', 'success');
+            } else {
+                showToast('Gagal menyimpan pengaturan.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Terjadi kesalahan jaringan.', 'error');
+        });
     }
 </script>
 @endsection
