@@ -12,6 +12,40 @@
         margin-bottom: 1rem;
         transition: all 0.3s ease;
     }
+    .stat-card {
+        padding: 1.5rem;
+        border-radius: var(--radius-xl);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .stat-content h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+    }
+    .stat-content .amount {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    .stat-content p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
     .debt-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
@@ -79,12 +113,12 @@
 </style>
 
 <div style="max-width: 1200px; margin: 0 auto;">
-    <div class="dashboard-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
+    <div class="dashboard-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div style="flex: 1; min-width: 250px;">
             <h2 style="margin: 0; font-size: 1.75rem; font-weight: 700; color: #ffffff;">Hutang & Piutang</h2>
             <p style="color: var(--text-muted); margin-top: 0.25rem; font-size: 0.95rem; margin-bottom: 0;">Catat pinjaman Anda atau pinjaman teman agar tidak lupa.</p>
         </div>
-        <button class="btn btn-primary" onclick="openAddModal()" style="display: flex; align-items: center; gap: 0.5rem;">
+        <button class="btn btn-primary" onclick="openAddModal()" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: max-content; padding: 0.75rem 1.5rem;">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Catat Baru
         </button>
