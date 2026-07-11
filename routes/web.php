@@ -90,6 +90,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/reset-akun', [App\Http\Controllers\SettingsController::class, 'resetAccount'])->name('settings.reset');
     Route::get('/panduan', function() { return view('guide.index'); })->name('guide.index');
 
+    // Helper Route untuk Hosting
+    Route::get('/linkstorage', function () {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'Storage berhasil di-link! Silakan kembali ke pengaturan profil Anda.';
+    });
+
     // Ubah Password
     Route::get('/password/change', [AuthController::class, 'showChangePasswordForm'])->name('password.change');
     Route::post('/password/change', [AuthController::class, 'updatePassword']);
