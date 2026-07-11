@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::post('/pengaturan/profil', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::post('/pengaturan/reset-akun', [App\Http\Controllers\SettingsController::class, 'resetAccount'])->name('settings.reset');
+    Route::post('/settings/notifications', [App\Http\Controllers\SettingsController::class, 'updateNotifications'])->name('settings.notifications');
     Route::get('/panduan', function() { return view('guide.index'); })->name('guide.index');
 
     // Helper Route untuk Hosting
