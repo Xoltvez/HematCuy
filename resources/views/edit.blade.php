@@ -56,16 +56,17 @@
                     <input type="hidden" id="amount" name="amount" required min="0" value="{{ old('amount', $transaction->amount) }}">
                 </div>
                 
-                <!-- Tanggal -->
-                <div class="form-group">
-                    <label for="date">Tanggal Transaksi</label>
-                    <input type="date" id="date" name="date" required value="{{ old('date', $transaction->date) }}">
-                </div>
-                
-                <!-- Waktu -->
-                <div class="form-group">
-                    <label for="time">Waktu (Jam)</label>
-                    <input type="time" id="time" name="time" value="{{ old('time', $transaction->time ? \Carbon\Carbon::parse($transaction->time)->format('H:i') : '') }}">
+                <!-- Tanggal & Waktu -->
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="date">Tanggal Transaksi</label>
+                        <input type="date" id="date" name="date" required value="{{ old('date', $transaction->date) }}">
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1;">
+                        <label for="time">Waktu (Jam)</label>
+                        <input type="time" id="time" name="time" value="{{ old('time', $transaction->time ? \Carbon\Carbon::parse($transaction->time)->format('H:i') : '') }}">
+                    </div>
                 </div>
             </div>
 

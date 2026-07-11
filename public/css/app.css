@@ -417,7 +417,7 @@ label {
     font-weight: 500;
 }
 
-input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="date"], select {
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="date"], input[type="time"], select {
     width: 100%;
     padding: 0.85rem 1rem;
     border-radius: var(--radius-md);
@@ -427,6 +427,10 @@ input[type="text"], input[type="number"], input[type="email"], input[type="passw
     font-family: inherit;
     font-size: 1rem;
     transition: all 0.2s ease;
+}
+
+input[type="date"], input[type="time"] {
+    color-scheme: dark;
 }
 
 input[type="checkbox"], input[type="radio"] {

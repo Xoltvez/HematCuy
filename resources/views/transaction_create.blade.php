@@ -54,16 +54,17 @@
                     <input type="hidden" id="amount" name="amount" required min="0">
                 </div>
                 
-                <!-- Tanggal -->
-                <div class="form-group">
-                    <label for="date">Tanggal Transaksi</label>
-                    <input type="date" id="date" name="date" required value="{{ date('Y-m-d') }}">
-                </div>
-                
-                <!-- Waktu -->
-                <div class="form-group">
-                    <label for="time">Waktu (Jam)</label>
-                    <input type="time" id="time" name="time" value="{{ date('H:i') }}">
+                <!-- Tanggal & Waktu -->
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="date">Tanggal Transaksi</label>
+                        <input type="date" id="date" name="date" required value="{{ date('Y-m-d') }}">
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1;">
+                        <label for="time">Waktu (Jam)</label>
+                        <input type="time" id="time" name="time" value="{{ date('H:i') }}">
+                    </div>
                 </div>
             </div>
 
