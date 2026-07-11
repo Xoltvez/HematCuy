@@ -40,7 +40,7 @@
                 </div>
                 <div>
                     <label for="due_date" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">Jatuh Tempo (Opsional)</label>
-                    <input type="date" id="due_date" name="due_date" style="width: 100%; border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); margin-top: 0.25rem; color: var(--text-main); font-family: inherit;">
+                    <input type="date" id="due_date" name="due_date" placeholder="dd:mm:yy" style="width: 100%; border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); margin-top: 0.25rem; color: var(--text-main); font-family: inherit;">
                 </div>
                 <div>
                     <label for="content" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">Isi Catatan</label>
