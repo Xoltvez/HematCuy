@@ -684,6 +684,9 @@
     @endauth
 
     @include('components.toast')
+    <!-- Modals Stack -->
+    @stack('modals')
+    
 </body>
 
 </html>

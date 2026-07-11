@@ -246,6 +246,7 @@
 
 </div>
 
+@push('modals')
 <!-- Modal Tambah Data -->
 <div class="modal-overlay" id="addDebtModal">
     <div class="modal-content" style="max-width: 500px;">
@@ -411,4 +412,5 @@
         });
     });
 </script>
+@endpush
 @endsection
