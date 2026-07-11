@@ -59,10 +59,8 @@
 
                         <div style="margin-bottom: 2rem;">
                             <label class="settings-label">Alamat Email</label>
-                            <input type="email" name="email" class="form-control settings-input @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()->email) }}" required>
-                            @error('email')
-                                <div class="invalid-feedback" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem;">{{ $message }}</div>
-                            @enderror
+                            <input type="email" class="form-control settings-input" value="{{ auth()->user()->email }}" disabled style="opacity: 0.6; cursor: not-allowed; background: rgba(255,255,255,0.02);">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 0;">Alamat email digunakan untuk login dan tidak dapat diubah.</p>
                         </div>
 
                         <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between;">

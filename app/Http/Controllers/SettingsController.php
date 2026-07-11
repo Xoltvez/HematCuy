@@ -21,13 +21,11 @@ class SettingsController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
 
         $data = [
             'name' => $request->name,
-            'email' => $request->email,
         ];
 
         if ($request->hasFile('profile_photo')) {
