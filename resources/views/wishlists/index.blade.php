@@ -279,7 +279,7 @@
             </div>
             <div>
                 <label for="target_date" style="color: var(--text-muted); font-size: 0.85rem;">Target Tanggal (Opsional)</label>
-                <input type="date" id="target_date" name="target_date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
+                <input type="date" id="target_date" name="target_date" title="yy:mm:dd" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
             </div>
             <button type="submit" class="btn" style="background: #3b82f6; color: #fff; margin-top: 0.5rem; border-radius: var(--radius-md); width: 100%;">Simpan Wishlist</button>
         </form>
@@ -352,7 +352,7 @@
             </div>
             <div>
                 <label for="edit_target_date" style="color: var(--text-muted); font-size: 0.85rem;">Target Tanggal (Opsional)</label>
-                <input type="date" id="edit_target_date" name="target_date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
+                <input type="date" id="edit_target_date" name="target_date" title="yy:mm:dd" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
             </div>
             <button type="submit" class="btn" style="background: #3b82f6; color: #fff; margin-top: 0.5rem; border-radius: var(--radius-md); width: 100%;">Simpan Perubahan</button>
         </form>
@@ -382,7 +382,7 @@
             @csrf
             <div>
                 <label for="purchased_date" style="color: var(--text-muted); font-size: 0.85rem;">Tanggal Pembelian</label>
-                <input type="date" id="purchased_date" name="purchased_date" value="{{ date('Y-m-d') }}" required style="border-color: rgba(16, 185, 129, 0.3); background: rgba(0,0,0,0.2); width: 100%;">
+                <input type="date" id="purchased_date" name="purchased_date" title="yy:mm:dd" value="{{ date('Y-m-d') }}" required style="border-color: rgba(16, 185, 129, 0.3); background: rgba(0,0,0,0.2); width: 100%;">
             </div>
             <button type="submit" class="btn" style="background: #10b981; color: #fff; margin-top: 0.5rem; border-radius: 9999px; width: 100%;">Tandai Terbeli & Potong Saldo</button>
         </form>
