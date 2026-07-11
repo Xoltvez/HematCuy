@@ -202,7 +202,7 @@
                     <div class="center-content">
                         <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem; color: #fff;">HematCuy.</h3>
                         <div class="version-badge">Versi 2.0.3</div>
-                        <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; max-width: 80%; margin-left: auto; margin-right: auto;">Aplikasi pencatatan keuangan cerdas yang membantu Anda melacak pengeluaran dan mencapai target finansial impian Anda.</p>
+                        <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; max-width: 80%; margin-left: auto; margin-right: auto;">Website pencatatan keuangan cerdas yang membantu Anda melacak pengeluaran dan mencapai target finansial impian Anda.</p>
                         <div class="copyright">&copy; {{ date('Y') }} HematCuy. Hak Cipta Dilindungi.</div>
                     </div>
                 </div>
