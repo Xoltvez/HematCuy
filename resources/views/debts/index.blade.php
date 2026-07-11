@@ -258,8 +258,8 @@
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Tipe Catatan</label>
                 <select name="type" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
-                    <option value="payable" style="color: black;">Saya berhutang / Meminjam uang</option>
-                    <option value="receivable" style="color: black;">Saya meminjamkan uang ke orang (Piutang)</option>
+                    <option value="payable" style="background: #1a1a1a; color: white;">Saya berhutang / Meminjam uang</option>
+                    <option value="receivable" style="background: #1a1a1a; color: white;">Saya meminjamkan uang ke orang (Piutang)</option>
                 </select>
             </div>
             
@@ -276,8 +276,8 @@
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Sumber/Tujuan Dana</label>
                 <select name="account" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
-                    <option value="cash" style="color: black;">Tunai</option>
-                    <option value="bank" style="color: black;">Bank/E-Wallet</option>
+                    <option value="cash" style="background: #1a1a1a; color: white;">Tunai</option>
+                    <option value="bank" style="background: #1a1a1a; color: white;">Bank/E-Wallet</option>
                 </select>
             </div>
 
@@ -317,8 +317,8 @@
             <div style="margin-bottom: 2rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Gunakan Saldo Dari/Ke</label>
                 <select name="account" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
-                    <option value="cash" style="color: black;">Tunai</option>
-                    <option value="bank" style="color: black;">Bank/E-Wallet</option>
+                    <option value="cash" style="background: #1a1a1a; color: white;">Tunai</option>
+                    <option value="bank" style="background: #1a1a1a; color: white;">Bank/E-Wallet</option>
                 </select>
             </div>
             
