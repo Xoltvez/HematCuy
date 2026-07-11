@@ -470,6 +470,7 @@
     </div>
 </div>
 
+@push('modals')
 <!-- Modal -->
 <div class="cal-modal-overlay" id="calTxModal" onclick="closeCalModal(event)">
     <div class="cal-modal-content" onclick="event.stopPropagation()">
@@ -487,6 +488,7 @@
         </div>
     </div>
 </div>
+@endpush
 
 <script>
     function showTransactions(dateFormatted, transactions, notes = []) {

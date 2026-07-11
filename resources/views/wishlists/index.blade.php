@@ -249,6 +249,7 @@
     }
 </style>
 
+@push('modals')
 <!-- Modal Tambah Wishlist -->
 <div id="addWishlistModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
     <div class="premium-glow-card" style="background: #111827; border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg); padding: 1.5rem; width: 90%; max-width: 400px; position: relative;">
@@ -416,6 +417,7 @@
         </form>
     </div>
 </div>
+@endpush
 
 
 <script>

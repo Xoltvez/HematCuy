@@ -244,6 +244,7 @@
     </div>
 </div>
 
+@push('modals')
 <!-- Custom Confirmation Modal Overlay -->
 <div id="resetConfirmModal" class="modal-overlay">
     <div class="modal-card">
@@ -255,7 +256,7 @@
             Tindakan ini <strong>TIDAK DAPAT DIBATALKAN</strong>.<br>Semua riwayat transaksi, budget, tabungan, dan catatan Anda akan dihapus secara permanen.
         </p>
         
-        <form action="{{ route('settings.reset') }}" method="POST">
+        <form id="resetForm" action="{{ route('settings.reset') }}" method="POST">
             @csrf
             <div class="modal-actions">
                 <button type="button" class="btn btn-outline" onclick="closeResetModal()">Batal</button>
@@ -264,6 +265,7 @@
         </form>
     </div>
 </div>
+@endpush
 
 <style>
     /* Accordion Container */
