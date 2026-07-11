@@ -214,6 +214,7 @@
                                 }
                                 #search-bar-container {
                                     margin-left: 1rem !important;
+                                    margin-right: 1rem !important;
                                 }
                                 #notif-dropdown {
                                     position: fixed !important;
