@@ -68,9 +68,9 @@
             
             <div class="form-row-grid">
                 <div class="form-group">
-                    <label for="category">Kategori (Opsional)</label>
+                    <label for="category">Kategori</label>
                     <!-- Menggunakan datalist agar pengguna bisa mengetik atau memilih dari daftar -->
-                    <input type="text" id="category" name="category" list="category-list" placeholder="Pilih atau Ketik Baru">
+                    <input type="text" id="category" name="category" list="category-list" placeholder="Pilih atau Ketik Baru" required>
                     <datalist id="category-list">
                         <option value="Makanan & Minuman">
                         <option value="Transportasi">

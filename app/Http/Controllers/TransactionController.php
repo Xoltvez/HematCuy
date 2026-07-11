@@ -214,7 +214,7 @@ class TransactionController extends Controller
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:income,expense',
             'account' => 'required|in:cash,bank',
-            'category' => 'nullable|string|max:255',
+            'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
         ]);
@@ -281,7 +281,7 @@ class TransactionController extends Controller
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:income,expense',
             'account' => 'required|in:cash,bank',
-            'category' => 'nullable|string|max:255',
+            'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
         ]);
