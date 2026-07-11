@@ -69,19 +69,20 @@
             <div class="form-row-grid">
                 <div class="form-group">
                     <label for="category">Kategori</label>
-                    <!-- Menggunakan datalist agar pengguna bisa mengetik atau memilih dari daftar -->
-                    <input type="text" id="category" name="category" list="category-list" placeholder="Pilih atau Ketik Baru" required>
-                    <datalist id="category-list">
-                        <option value="Makanan & Minuman">
-                        <option value="Transportasi">
-                        <option value="Belanja">
-                        <option value="Tagihan & Utilitas">
-                        <option value="Hiburan">
-                        <option value="Kesehatan">
-                        <option value="Tabungan">
-                        <option value="Gaji">
-                        <option value="Lain-lain">
-                    </datalist>
+                    <select id="category_select" name="category" required onchange="handleCategoryChange()">
+                        <option value="" disabled selected>-- Pilih Kategori --</option>
+                        <option value="Makanan & Minuman">Makanan & Minuman</option>
+                        <option value="Transportasi">Transportasi</option>
+                        <option value="Belanja">Belanja</option>
+                        <option value="Tagihan & Utilitas">Tagihan & Utilitas</option>
+                        <option value="Hiburan">Hiburan</option>
+                        <option value="Kesehatan">Kesehatan</option>
+                        <option value="Tabungan">Tabungan</option>
+                        <option value="Gaji">Gaji</option>
+                        <option value="Lain-lain">Lain-lain</option>
+                        <option value="custom">-- Ketik Baru --</option>
+                    </select>
+                    <input type="text" id="category_custom" placeholder="Ketik kategori baru..." style="display: none; margin-top: 0.5rem;" required disabled>
                     <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;">*Penting: Samakan nama kategori dengan nama pos di fitur Budgeting agar progres terpotong otomatis.</small>
                 </div>
                 
@@ -187,5 +188,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function handleCategoryChange() {
+    const select = document.getElementById('category_select');
+    const custom = document.getElementById('category_custom');
+    if (select.value === 'custom') {
+        custom.style.display = 'block';
+        custom.disabled = false;
+        select.removeAttribute('name');
+        custom.setAttribute('name', 'category');
+        custom.focus();
+    } else {
+        custom.style.display = 'none';
+        custom.disabled = true;
+        select.setAttribute('name', 'category');
+        custom.removeAttribute('name');
+    }
+}
 </script>
 @endsection

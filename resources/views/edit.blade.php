@@ -71,19 +71,18 @@
             <div class="form-row-grid">
                 <div class="form-group">
                     <label for="category">Kategori</label>
-                    <!-- Menggunakan datalist agar pengguna bisa mengetik atau memilih dari daftar -->
-                    <input type="text" id="category" name="category" list="category-list" placeholder="Pilih atau Ketik Baru" value="{{ old('category', $transaction->category) }}" required>
-                    <datalist id="category-list">
-                        <option value="Makanan & Minuman">
-                        <option value="Transportasi">
-                        <option value="Belanja">
-                        <option value="Tagihan & Utilitas">
-                        <option value="Hiburan">
-                        <option value="Kesehatan">
-                        <option value="Tabungan">
-                        <option value="Gaji">
-                        <option value="Lain-lain">
-                    </datalist>
+                    @php
+                        $commonCategories = ['Makanan & Minuman', 'Transportasi', 'Belanja', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Tabungan', 'Gaji', 'Lain-lain'];
+                        $isCustomCategory = !in_array(old('category', $transaction->category), $commonCategories) && old('category', $transaction->category);
+                    @endphp
+                    <select id="category_select" name="{{ $isCustomCategory ? '' : 'category' }}" required onchange="handleCategoryChange()">
+                        <option value="" disabled {{ !old('category', $transaction->category) ? 'selected' : '' }}>-- Pilih Kategori --</option>
+                        @foreach($commonCategories as $cat)
+                            <option value="{{ $cat }}" {{ old('category', $transaction->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        @endforeach
+                        <option value="custom" {{ $isCustomCategory ? 'selected' : '' }}>-- Ketik Baru --</option>
+                    </select>
+                    <input type="text" id="category_custom" name="{{ $isCustomCategory ? 'category' : '' }}" value="{{ $isCustomCategory ? old('category', $transaction->category) : '' }}" placeholder="Ketik kategori baru..." style="{{ $isCustomCategory ? 'display: block;' : 'display: none;' }} margin-top: 0.5rem;" required {{ $isCustomCategory ? '' : 'disabled' }}>
                 </div>
                 
                 <div class="form-group">
@@ -191,5 +190,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function handleCategoryChange() {
+    const select = document.getElementById('category_select');
+    const custom = document.getElementById('category_custom');
+    if (select.value === 'custom') {
+        custom.style.display = 'block';
+        custom.disabled = false;
+        select.removeAttribute('name');
+        custom.setAttribute('name', 'category');
+        custom.focus();
+    } else {
+        custom.style.display = 'none';
+        custom.disabled = true;
+        select.setAttribute('name', 'category');
+        custom.removeAttribute('name');
+    }
+}
 </script>
 @endsection
