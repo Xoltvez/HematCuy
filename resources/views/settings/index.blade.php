@@ -33,7 +33,7 @@
                             <div style="position: relative;">
                                 <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
                                     @if(auth()->user()->profile_photo_path)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <img src="{{ asset(auth()->user()->profile_photo_path) }}" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
                                     @else
                                         <span style="font-size: 2rem; font-weight: 700; color: var(--text-muted);">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                                     @endif

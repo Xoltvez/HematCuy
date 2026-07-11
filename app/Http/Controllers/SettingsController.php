@@ -29,14 +29,14 @@ class SettingsController extends Controller
         ];
 
         if ($request->hasFile('profile_photo')) {
-            // Hapus foto lama jika ada
-            if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+            // Hapus foto lama jika ada (hanya jika tersimpan di disk public_uploads / public)
+            if ($user->profile_photo_path && file_exists(public_path($user->profile_photo_path))) {
+                unlink(public_path($user->profile_photo_path));
             }
 
-            // Simpan foto baru
-            $path = $request->file('profile_photo')->store('profile-photos', 'public');
-            $data['profile_photo_path'] = $path;
+            // Simpan foto baru langsung ke folder public/uploads
+            $path = $request->file('profile_photo')->store('profile-photos', 'public_uploads');
+            $data['profile_photo_path'] = 'uploads/' . $path;
         }
 
         $user->update($data);
