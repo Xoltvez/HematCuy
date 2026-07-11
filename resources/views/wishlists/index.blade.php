@@ -279,7 +279,7 @@
             </div>
             <div>
                 <label for="target_date" style="color: var(--text-muted); font-size: 0.85rem;">Target Tanggal (Opsional)</label>
-                <input type="text" onfocus="(this.type='date')" onblur="(this.value == '' ? this.type='text' : this.type='date')" placeholder="yy:mm:dd" id="target_date" name="target_date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
+                <input type="date" placeholder="yy:mm:dd" id="target_date" name="target_date" class="custom-filter-date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
             </div>
             <button type="submit" class="btn" style="background: #3b82f6; color: #fff; margin-top: 0.5rem; border-radius: var(--radius-md); width: 100%;">Simpan Wishlist</button>
         </form>
@@ -352,7 +352,7 @@
             </div>
             <div>
                 <label for="edit_target_date" style="color: var(--text-muted); font-size: 0.85rem;">Target Tanggal (Opsional)</label>
-                <input type="text" onfocus="(this.type='date')" onblur="(this.value == '' ? this.type='text' : this.type='date')" placeholder="yy:mm:dd" id="edit_target_date" name="target_date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
+                <input type="date" placeholder="yy:mm:dd" id="edit_target_date" name="target_date" class="custom-filter-date" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(0,0,0,0.2); width: 100%; color-scheme: dark;">
             </div>
             <button type="submit" class="btn" style="background: #3b82f6; color: #fff; margin-top: 0.5rem; border-radius: var(--radius-md); width: 100%;">Simpan Perubahan</button>
         </form>

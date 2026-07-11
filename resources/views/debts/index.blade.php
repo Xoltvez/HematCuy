@@ -285,7 +285,7 @@
 
             <div style="margin-bottom: 2rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Tanggal Jatuh Tempo (Opsional)</label>
-                <input type="text" onfocus="(this.type='date')" onblur="(this.value == '' ? this.type='text' : this.type='date')" placeholder="yy:mm:dd" name="due_date" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white; color-scheme: dark;">
+                <input type="date" placeholder="yy:mm:dd" name="due_date" class="form-control custom-filter-date" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white; color-scheme: dark;">
             </div>
             
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
