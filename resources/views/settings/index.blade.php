@@ -3,7 +3,7 @@
 @section('content')
 <div style="max-width: 800px; margin: 0 auto; padding-bottom: 5rem;">
     
-    <div style="margin-bottom: 3rem; text-align: center;">
+    <div style="margin-bottom: 3rem; text-align: left;">
         <h2 style="margin: 0; font-size: 2.25rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pengaturan</h2>
         <p style="color: var(--text-muted); font-size: 1.05rem; margin-top: 0.5rem;">Sesuaikan preferensi Anda dengan mudah.</p>
     </div>
