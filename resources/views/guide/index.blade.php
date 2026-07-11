@@ -217,6 +217,46 @@
                 </div>
             </div>
         </div>
+        <!-- Accordion Item: Hutang & Piutang -->
+        <div class="accordion-item guide-category">
+            <button class="accordion-header" aria-expanded="false">
+                <div class="acc-title-group">
+                    <div class="acc-icon red">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <span>Catat Hutang & Piutang</span>
+                </div>
+                <div class="acc-chevron">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-content-inner">
+                    <div class="guide-article">
+                        <h3 class="guide-card-title">📝 Mencatat Hutang / Piutang Baru</h3>
+                        <ol class="guide-steps">
+                            <li>Buka menu <strong>Hutang / Piutang</strong> dari sidebar menu.</li>
+                            <li>Klik tombol <strong>+ Catat Baru</strong>.</li>
+                            <li>Pilih tipe catatan: <strong>Saya berhutang (Hutang)</strong> atau <strong>Saya meminjamkan uang (Piutang)</strong>.</li>
+                            <li>Masukkan nama orang yang bersangkutan, nominal uang, dan sumber/tujuan dana.</li>
+                            <li>Sistem akan otomatis mencatatnya sebagai transaksi (memotong atau menambah saldo utama Anda).</li>
+                        </ol>
+                    </div>
+
+                    <div class="guide-article">
+                        <h3 class="guide-card-title">💳 Bayar Cicilan atau Pelunasan</h3>
+                        <ol class="guide-steps">
+                            <li>Di halaman <strong>Hutang / Piutang</strong>, cari catatan yang ingin dilunasi/dicicil.</li>
+                            <li>Klik tombol <strong>Bayar Cicilan / Lunas</strong> (ikon dompet).</li>
+                            <li>Masukkan nominal uang yang akan dibayarkan/diterima.</li>
+                            <li>Pilih dari/ke mana saldo tersebut akan diproses (Tunai atau Bank).</li>
+                            <li>Jika nominal yang dimasukkan sama dengan sisa hutang/piutang, maka statusnya akan otomatis menjadi <strong>Lunas</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Accordion Item: FAQ -->
         <div class="accordion-item guide-category">
