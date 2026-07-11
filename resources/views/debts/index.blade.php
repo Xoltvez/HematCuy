@@ -366,9 +366,9 @@
 
     function openPayModal(id, remaining) {
         document.getElementById('payDebtForm').action = '/debts/' + id + '/pay';
-        document.getElementById('payDebtRemaining').innerText = 'Rp ' + remaining.toLocaleString('id-ID');
-        document.getElementById('payDebtAmountInput').value = remaining;
-        document.getElementById('payDebtAmountInput').max = remaining;
+        document.getElementById('payDebtRemaining').innerText = 'Rp ' + parseInt(remaining, 10).toLocaleString('id-ID');
+        document.getElementById('payDebtAmountDisplay').value = parseInt(remaining, 10).toLocaleString('id-ID');
+        document.getElementById('payDebtAmountReal').value = remaining;
         document.getElementById('payDebtModal').classList.add('active');
     }
 
