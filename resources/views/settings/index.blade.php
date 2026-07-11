@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="max-width: 1200px; margin: 0 auto; padding-bottom: 3rem;">
+<div style="max-width: 1200px; margin: 0 auto; padding-bottom: 5rem;">
     
     <div style="margin-bottom: 2.5rem;">
         <h2 style="margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pengaturan</h2>
@@ -9,8 +9,9 @@
     </div>
 
     <div class="settings-layout">
-        <!-- Floating Island Sidebar -->
+        <!-- Floating Island Sidebar (Table of Contents) -->
         <div class="settings-sidebar">
+            <h4 style="margin: 0 0 1rem 0.5rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Daftar Isi</h4>
             <ul id="settings-menu" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
                 <li>
                     <button class="settings-tab-btn active" data-target="profil">
@@ -55,14 +56,15 @@
             </ul>
         </div>
 
-        <!-- Konten Pengaturan -->
+        <!-- Konten Pengaturan (Single Page Scroll) -->
         <div class="settings-content-area">
             
             <!-- Profil Content -->
-            <div id="profil-content" class="settings-content active">
+            <div id="profil-content" class="settings-content">
+                <div class="section-header">
+                    <h3>Profil Akun</h3>
+                </div>
                 <div class="settings-card profile-card">
-                    <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem;">Informasi Akun</h3>
-                    
                     <div style="margin-bottom: 1.5rem;">
                         <label class="settings-label">Nama Lengkap</label>
                         <input type="text" class="form-control settings-input" value="{{ auth()->user()->name }}" disabled>
@@ -82,7 +84,9 @@
 
             <!-- Notifikasi Content -->
             <div id="notifikasi-content" class="settings-content">
-                
+                <div class="section-header">
+                    <h3>Preferensi Notifikasi</h3>
+                </div>
                 <div class="settings-card toggle-card">
                     <div class="card-text">
                         <h4>Pengingat batas anggaran harian</h4>
@@ -119,6 +123,9 @@
 
             <!-- Tampilan Content -->
             <div id="tampilan-content" class="settings-content">
+                <div class="section-header">
+                    <h3>Tampilan & Tema</h3>
+                </div>
                 <div class="settings-card toggle-card">
                     <div class="card-text">
                         <h4>Mode Gelap (Dark Mode)</h4>
@@ -136,11 +143,14 @@
 
             <!-- Bantuan Content -->
             <div id="bantuan-content" class="settings-content">
+                <div class="section-header">
+                    <h3>Pusat Bantuan</h3>
+                </div>
                 <div class="settings-card center-card">
                     <div class="big-icon blue-glow">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     </div>
-                    <h3>Butuh Bantuan?</h3>
+                    <h3>Ada kendala?</h3>
                     <p>Temukan jawaban dari pertanyaan Anda di Pusat Panduan kami yang lengkap dan interaktif.</p>
                     <a href="{{ route('guide.index') }}" class="btn btn-primary" style="text-decoration: none;">Lihat Pusat Panduan</a>
                 </div>
@@ -148,6 +158,9 @@
 
             <!-- Tentang Content -->
             <div id="tentang-content" class="settings-content">
+                <div class="section-header">
+                    <h3>Tentang Aplikasi</h3>
+                </div>
                 <div class="settings-card center-card">
                     <div class="big-icon blue-glow" style="margin-bottom: 1.5rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
@@ -167,7 +180,7 @@
     /* Layout */
     .settings-layout {
         display: flex;
-        gap: 2.5rem;
+        gap: 3rem;
         align-items: flex-start;
     }
     
@@ -180,7 +193,7 @@
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: var(--radius-xl);
-        padding: 1rem;
+        padding: 1.5rem 1rem;
         position: sticky;
         top: 2rem;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -241,27 +254,25 @@
     .settings-content-area {
         flex: 1;
         min-width: 0;
-        position: relative;
     }
     
     .settings-content {
-        display: none;
-        animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    
-    .settings-content.active {
         display: block;
+        margin-bottom: 4rem;
+        scroll-margin-top: 2rem;
     }
     
-    @keyframes fadeSlideUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .section-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .section-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
     }
 
     /* Cards */
@@ -468,19 +479,45 @@
         const tabBtns = document.querySelectorAll('.settings-tab-btn');
         const contents = document.querySelectorAll('.settings-content');
 
+        // Smooth scroll to section on click
         tabBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Remove active classes
-                tabBtns.forEach(b => b.classList.remove('active'));
-                contents.forEach(c => c.classList.remove('active'));
-
-                // Add active class to clicked button
-                this.classList.add('active');
-
-                // Show target content
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
                 const targetId = this.getAttribute('data-target') + '-content';
-                document.getElementById(targetId).classList.add('active');
+                const targetContent = document.getElementById(targetId);
+                
+                if(targetContent) {
+                    targetContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
+        });
+
+        // Intersection Observer for Scrollspy
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px', // Trigger when section is in the top portion of viewport
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id').replace('-content', '');
+                    
+                    // Remove active class from all buttons
+                    tabBtns.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to the currently visible section's button
+                    const activeBtn = document.querySelector(`.settings-tab-btn[data-target="${id}"]`);
+                    if (activeBtn) {
+                        activeBtn.classList.add('active');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        contents.forEach(content => {
+            observer.observe(content);
         });
     });
 </script>
