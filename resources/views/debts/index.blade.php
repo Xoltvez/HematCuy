@@ -265,12 +265,13 @@
             
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Nama Orang / Instansi</label>
-                <input type="text" name="person_name" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="Cth: Budi / Paylater" required>
+                <input type="text" name="person_name" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="Cth: Budi" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" required>
             </div>
 
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Jumlah Uang (Rp)</label>
-                <input type="number" name="amount" min="1" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="0" required>
+                <input type="text" id="addDebtAmountDisplay" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="0" oninput="formatRupiah(this, 'addDebtAmountReal')" required>
+                <input type="hidden" name="amount" id="addDebtAmountReal" required>
             </div>
 
             <div style="margin-bottom: 1.5rem;">
@@ -311,7 +312,8 @@
 
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Jumlah Dibayar (Rp)</label>
-                <input type="number" name="amount" id="payDebtAmountInput" min="1" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
+                <input type="text" id="payDebtAmountDisplay" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="0" oninput="formatRupiah(this, 'payDebtAmountReal')" required>
+                <input type="hidden" name="amount" id="payDebtAmountReal" required>
             </div>
 
             <div style="margin-bottom: 2rem;">
@@ -328,6 +330,16 @@
 </div>
 
 <script>
+    function formatRupiah(input, hiddenId) {
+        let val = input.value.replace(/[^0-9]/g, '');
+        if (val !== '') {
+            document.getElementById(hiddenId).value = val;
+            input.value = parseInt(val, 10).toLocaleString('id-ID');
+        } else {
+            document.getElementById(hiddenId).value = '';
+            input.value = '';
+        }
+    }
     function switchTab(tab) {
         if (tab === 'payable') {
             document.getElementById('tab-payable').classList.add('active');
