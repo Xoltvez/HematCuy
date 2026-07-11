@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
 
     // Pengaturan & Panduan
     Route::get('/pengaturan', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::post('/pengaturan/reset-akun', [App\Http\Controllers\SettingsController::class, 'resetAccount'])->name('settings.reset');
     Route::get('/panduan', function() { return view('guide.index'); })->name('guide.index');
 

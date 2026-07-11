@@ -26,6 +26,7 @@ class User extends Authenticatable
         'otp_expires_at',
         'daily_budget',
         'daily_alert_sent_at',
+        'profile_photo_path',
     ];
 
     /**

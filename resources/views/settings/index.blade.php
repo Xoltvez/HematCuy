@@ -26,20 +26,55 @@
             </button>
             <div class="accordion-content">
                 <div class="accordion-content-inner">
-                    <div style="margin-bottom: 1.5rem;">
-                        <label class="settings-label">Nama Lengkap</label>
-                        <input type="text" class="form-control settings-input" value="{{ auth()->user()->name }}" disabled>
-                    </div>
+                    <form action="{{ route('settings.profile.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        
+                        <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                            <div style="position: relative;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+                                    @if(auth()->user()->profile_photo_path)
+                                        <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                                    @else
+                                        <span style="font-size: 2rem; font-weight: 700; color: var(--text-muted);">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                                    @endif
+                                </div>
+                                <label for="profile_photo" style="position: absolute; bottom: -5px; right: -5px; background: var(--accent-blue); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; border: 2px solid #0f172a; transition: all 0.2s;" class="photo-edit-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                                </label>
+                                <input type="file" id="profile_photo" name="profile_photo" accept="image/*" style="display: none;" onchange="previewPhoto(this)">
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.25rem;">Foto Profil</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Format JPG, PNG, atau WebP (Maks. 2MB)</p>
+                            </div>
+                        </div>
 
-                    <div style="margin-bottom: 2rem;">
-                        <label class="settings-label">Alamat Email</label>
-                        <input type="email" class="form-control settings-input" value="{{ auth()->user()->email }}" disabled>
-                    </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="settings-label">Nama Lengkap</label>
+                            <input type="text" name="name" class="form-control settings-input @error('name') is-invalid @enderror" value="{{ old('name', auth()->user()->name) }}" required>
+                            @error('name')
+                                <div class="invalid-feedback" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem;">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <a href="{{ route('password.change') }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        Ubah Password
-                    </a>
+                        <div style="margin-bottom: 2rem;">
+                            <label class="settings-label">Alamat Email</label>
+                            <input type="email" name="email" class="form-control settings-input @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()->email) }}" required>
+                            @error('email')
+                                <div class="invalid-feedback" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+                            <a href="{{ route('password.change') }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                Ubah Password
+                            </a>
+                            <button type="submit" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -661,5 +696,29 @@
             closeResetModal();
         }
     });
+
+    // Profile Photo Preview
+    function previewPhoto(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Find the image container
+                const container = input.previousElementSibling.previousElementSibling;
+                
+                // Set the image src
+                container.innerHTML = '<img src="' + e.target.result + '" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">';
+                
+                // If it's inside accordion, recalculate height
+                const accordionContent = input.closest('.accordion-content');
+                if (accordionContent && accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = 'none';
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px';
+                }
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 @endsection

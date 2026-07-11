@@ -305,8 +305,12 @@
 
                     @auth
                     <div class="user-profile" style="position: relative; cursor: pointer;" onclick="document.getElementById('profile-dropdown').classList.toggle('show'); event.stopPropagation();">
-                        <div class="user-avatar">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        <div class="user-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);">
+                            @if(auth()->user()->profile_photo_path)
+                                <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            @endif
                         </div>
                         <div class="user-info" style="display: none;">
                             <span class="user-name">{{ auth()->user()->name }}</span>
