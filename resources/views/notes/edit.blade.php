@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <label for="due_date">Jatuh Tempo (Opsional)</label>
-            <input type="date" id="due_date" name="due_date" placeholder="dd:mm:yy" value="{{ old('due_date', $note->due_date ? \Carbon\Carbon::parse($note->due_date)->format('Y-m-d') : '') }}" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background-color: rgba(15, 23, 42, 0.5); color: var(--text-main); font-family: inherit;">
+            <input type="date" id="due_date" name="due_date" placeholder="yy:mm:dd" value="{{ old('due_date', $note->due_date ? \Carbon\Carbon::parse($note->due_date)->format('Y-m-d') : '') }}" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background-color: rgba(15, 23, 42, 0.5); color: var(--text-main); font-family: inherit;">
         </div>
         
         <div class="form-group">
