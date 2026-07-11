@@ -187,14 +187,14 @@
             </div>
         </div>
 
-        <!-- Accordion Item: Catat Struk AI -->
+        <!-- Accordion Item: Catat Struk -->
         <div class="accordion-item guide-category">
             <button class="accordion-header" aria-expanded="false">
                 <div class="acc-title-group">
                     <div class="acc-icon pink">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
                     </div>
-                    <span>Catat Struk AI</span>
+                    <span>Catat Struk</span>
                 </div>
                 <div class="acc-chevron">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -203,13 +203,13 @@
             <div class="accordion-content">
                 <div class="accordion-content-inner">
                     <div class="guide-article">
-                        <h3 class="guide-card-title">📸 Catat Cepat Menggunakan Pemindai Struk AI</h3>
+                        <h3 class="guide-card-title">📸 Catat Cepat Menggunakan Pemindai Struk</h3>
                         <ol class="guide-steps">
                             <li>Masuk ke menu <strong>Catat Struk</strong> dari sidebar menu.</li>
                             <li>Klik area seret file untuk mengunggah foto struk belanja Anda (dari galeri HP atau jepret langsung).</li>
                             <li>Tekan tombol <strong>Pindai Struk</strong>.</li>
                             <li>Sinar laser visual pemindai akan berjalan memproses pembacaan gambar.</li>
-                            <li>Sistem AI akan mengekstrak daftar barang belanjaan, kuantitas (qty), harga masing-masing barang, pajak, serta total belanjanya secara otomatis.</li>
+                            <li>Sistem akan mengekstrak daftar barang belanjaan, kuantitas (qty), harga masing-masing barang, pajak, serta total belanjanya secara otomatis.</li>
                             <li>Koreksi hasil bacaan jika ada kesalahan penulisan, nominal total akan otomatis menghitung ulang secara real-time.</li>
                             <li>Klik <strong>Simpan ke Pengeluaran</strong> untuk memasukkan daftar belanjaan tersebut langsung ke riwayat transaksi Anda.</li>
                         </ol>
