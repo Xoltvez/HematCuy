@@ -285,14 +285,14 @@
     }
     
     .search-container {
-        max-width: 100%;
+        max-width: 500px;
         margin: 0;
         position: relative;
     }
     
     .search-icon {
         position: absolute;
-        left: 1.5rem;
+        left: 1.25rem;
         top: 50%;
         transform: translateY(-50%);
         color: #94a3b8;
@@ -300,7 +300,7 @@
     
     .search-input {
         width: 100%;
-        padding: 1rem 1.5rem 1rem 3.25rem;
+        padding: 1rem 1.5rem 1rem 3.5rem;
         border-radius: 16px;
         border: 1px solid rgba(255,255,255,0.1);
         background: rgba(255, 255, 255, 0.03);
