@@ -187,7 +187,7 @@
     <div class="filter-card">
         <div class="filter-card-title" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
             <span>SARING RENTANG STATISTIK</span>
-            <a href="{{ route('report.pdf', request()->all()) }}" class="btn-pdf-download" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); text-decoration: none; padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; letter-spacing: 0; text-transform: none; transition: all 0.2s;">
+            <a href="{{ route('report.pdf', request()->all()) }}" class="btn-pdf-download" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); text-decoration: none; padding: 0.4rem 0.75rem; border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 600; letter-spacing: 0; text-transform: none; transition: all 0.2s;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                 Cetak PDF
             </a>
