@@ -191,7 +191,7 @@
                     <div class="acc-icon pink">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                     </div>
-                    <span>Tentang Aplikasi</span>
+                    <span>Tentang Website</span>
                 </div>
                 <div class="acc-chevron">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -201,7 +201,7 @@
                 <div class="accordion-content-inner">
                     <div class="center-content">
                         <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem; color: #fff;">HematCuy.</h3>
-                        <div class="version-badge">Versi 1.0.0 (BETA)</div>
+                        <div class="version-badge">Versi 2.0.3</div>
                         <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; max-width: 80%; margin-left: auto; margin-right: auto;">Aplikasi pencatatan keuangan cerdas yang membantu Anda melacak pengeluaran dan mencapai target finansial impian Anda.</p>
                         <div class="copyright">&copy; {{ date('Y') }} HematCuy. Hak Cipta Dilindungi.</div>
                     </div>
