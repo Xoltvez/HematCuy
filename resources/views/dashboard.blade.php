@@ -183,7 +183,12 @@
                             @endif
                             <div>
                                 <div style="font-weight: 500; font-size: 0.95rem;">{{ $tx->title }}</div>
-                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ \Carbon\Carbon::parse($tx->date)->format('d M Y') }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                    {{ \Carbon\Carbon::parse($tx->date)->format('d M Y') }}
+                                    @if($tx->time)
+                                        &bull; {{ \Carbon\Carbon::parse($tx->time)->format('H:i') }}
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div style="font-weight: 600; font-size: 0.95rem; color: {{ $tx->type === 'income' ? '#34d399' : '#fff' }}; white-space: nowrap;">

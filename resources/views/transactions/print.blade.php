@@ -95,7 +95,12 @@
                     else $totalExpense += $tx->amount;
                 @endphp
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($tx->date)->format('d/m/Y') }}</td>
+                    <td>
+                        {{ \Carbon\Carbon::parse($tx->date)->format('d/m/Y') }}
+                        @if($tx->time)
+                            <br><small style="color: #666;">{{ \Carbon\Carbon::parse($tx->time)->format('H:i') }}</small>
+                        @endif
+                    </td>
                     <td>
                         @if($tx->type === 'income')
                             <span class="income">Pemasukan</span>

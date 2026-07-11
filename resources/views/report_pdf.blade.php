@@ -102,7 +102,12 @@
         <tbody>
             @forelse($transactions as $tx)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($tx->date)->format('d/m/Y') }}</td>
+                    <td>
+                        {{ \Carbon\Carbon::parse($tx->date)->format('d/m/Y') }}
+                        @if($tx->time)
+                            <br><small style="color: #666;">{{ \Carbon\Carbon::parse($tx->time)->format('H:i') }}</small>
+                        @endif
+                    </td>
                     <td>{{ $tx->title }}</td>
                     <td>{{ $tx->category }}</td>
                     <td>
