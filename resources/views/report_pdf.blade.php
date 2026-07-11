@@ -55,7 +55,7 @@
         @if($start_date && $end_date)
             Periode: {{ \Carbon\Carbon::parse($start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($end_date)->format('d M Y') }}
         @elseif($month && $year)
-            Periode: {{ \Carbon\Carbon::create()->month($month)->format('F') }} {{ $year }}
+            Periode: {{ \Carbon\Carbon::createFromDate($year, $month, 1)->format('F') }} {{ $year }}
         @elseif($year)
             Periode: Tahun {{ $year }}
         @else
