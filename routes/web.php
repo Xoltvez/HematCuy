@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/target-harian', [TransactionController::class, 'target'])->name('target.index');
     Route::get('/kalkulator', function() { return view('calculator'); })->name('calculator');
     Route::get('/laporan', [TransactionController::class, 'report'])->name('report');
+    Route::get('/laporan/cetak-pdf', [TransactionController::class, 'exportPdf'])->name('report.pdf');
     Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index'])->name('calendar');
     
     // Transaksi Baru

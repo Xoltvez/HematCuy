@@ -196,6 +196,50 @@ class TransactionController extends Controller
         return view('report', compact('transactions', 'totalIncome', 'totalExpense', 'balanceCash', 'balanceBank', 'expensesByCategory', 'incomesByCategory', 'availableYears'));
     }
 
+    public function exportPdf(Request $request)
+    {
+        $query = auth()->user()->transactions()->orderBy('date', 'desc');
+
+        if ($request->filled('start_date')) {
+            $query->where('date', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->where('date', '<=', $request->end_date);
+        }
+        if ($request->filled('year')) {
+            $query->whereYear('date', $request->year);
+        }
+        if ($request->filled('month')) {
+            $query->whereMonth('date', $request->month);
+        }
+
+        $transactions = $query->get();
+
+        $totalIncome = $transactions->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
+        $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        
+        $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->where('account', 'cash')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+                     
+        $balanceBank = $transactions->where('account', 'bank')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->where('account', 'bank')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+
+        $data = [
+            'transactions' => $transactions,
+            'totalIncome' => $totalIncome,
+            'totalExpense' => $totalExpense,
+            'balanceCash' => $balanceCash,
+            'balanceBank' => $balanceBank,
+            'month' => $request->month,
+            'year' => $request->year,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ];
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('report_pdf', $data);
+        return $pdf->download('Laporan_HematCuy_' . date('Ymd_His') . '.pdf');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -318,12 +362,5 @@ class TransactionController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Batas anggaran harian berhasil diperbarui!');
-    }
-
-
-    public function exportPdf()
-    {
-        $transactions = auth()->user()->transactions()->orderBy('date', 'desc')->get();
-        return view('transactions.print', compact('transactions'));
     }
 }
