@@ -25,9 +25,9 @@
                 <div id="drop-zone" class="scanner-container" style="border: 2px dashed rgba(59, 130, 246, 0.4); border-radius: var(--radius-lg); padding: 4rem 2rem; text-align: center; margin-bottom: 1.5rem; background: rgba(59, 130, 246, 0.05); cursor: pointer; transition: all 0.3s ease;" onclick="document.getElementById('receipt_image').click()">
                     <div class="scan-beam"></div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #60a5fa; margin-bottom: 1rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-                    <p style="color: var(--text-main); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">Klik atau Seret (Drag & Drop) Foto Struk Kesini</p>
+                    <p style="color: var(--text-main); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">Ambil Foto atau Unggah Struk Kesini</p>
                     <p style="color: var(--text-muted); font-size: 0.9rem;" id="file-name">Format didukung: JPG, PNG, WEBP (Maks 5MB)</p>
-                    <input type="file" id="receipt_image" name="receipt_image" accept="image/*" style="display: none;" onchange="updateFileName(this)" required>
+                    <input type="file" id="receipt_image" name="receipt_image" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName(this)" required>
                 </div>
                 
                 <button type="submit" id="analyze-btn" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-lg); font-size: 1.1rem; padding: 1.2rem; font-weight: 600; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);">
