@@ -59,6 +59,12 @@
                     <label for="date">Tanggal Transaksi</label>
                     <input type="date" id="date" name="date" required value="{{ date('Y-m-d') }}">
                 </div>
+                
+                <!-- Waktu -->
+                <div class="form-group">
+                    <label for="time">Waktu (Jam)</label>
+                    <input type="time" id="time" name="time" value="{{ date('H:i') }}">
+                </div>
             </div>
 
             <div class="form-group">

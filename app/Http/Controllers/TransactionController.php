@@ -261,6 +261,7 @@ class TransactionController extends Controller
             'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
+            'time' => 'nullable',
         ]);
 
         $validated['user_id'] = auth()->id();
@@ -328,6 +329,7 @@ class TransactionController extends Controller
             'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
+            'time' => 'nullable',
         ]);
 
         if ($transaction->user_id !== auth()->id()) {

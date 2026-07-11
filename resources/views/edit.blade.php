@@ -61,6 +61,12 @@
                     <label for="date">Tanggal Transaksi</label>
                     <input type="date" id="date" name="date" required value="{{ old('date', $transaction->date) }}">
                 </div>
+                
+                <!-- Waktu -->
+                <div class="form-group">
+                    <label for="time">Waktu (Jam)</label>
+                    <input type="time" id="time" name="time" value="{{ old('time', $transaction->time ? \Carbon\Carbon::parse($transaction->time)->format('H:i') : '') }}">
+                </div>
             </div>
 
             <div class="form-group">
