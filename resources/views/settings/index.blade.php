@@ -175,7 +175,59 @@
                 </div>
             </div>
         </div>
+        <!-- Accordion Item: Keamanan Akun -->
+        <div class="accordion-item" id="acc-keamanan">
+            <button class="accordion-header" aria-expanded="false">
+                <div class="acc-title-group">
+                    <div class="acc-icon red">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                    </div>
+                    <span style="color: #ef4444;">Keamanan Akun</span>
+                </div>
+                <div class="acc-chevron">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-content-inner">
+                    <div class="danger-zone">
+                        <div class="card-text">
+                            <h4 style="color: #ef4444; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                Zona Berbahaya
+                            </h4>
+                            <p style="margin-bottom: 1rem;">Reset semua aktivitas di akun Anda (Transaksi, Tabungan, Budget, dan Catatan akan dihapus permanen). Akun Anda sendiri tidak akan terhapus.</p>
+                            
+                            <button type="button" class="btn btn-danger" onclick="showResetModal()">
+                                Reset Aktivitas Akun
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal Overlay -->
+<div id="resetConfirmModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon warning">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3 class="modal-title">Yakin Ingin Mereset Akun?</h3>
+        <p class="modal-desc">
+            Tindakan ini <strong>TIDAK DAPAT DIBATALKAN</strong>.<br>Semua riwayat transaksi, budget, tabungan, dan catatan Anda akan dihapus secara permanen.
+        </p>
+        
+        <form action="{{ route('settings.reset') }}" method="POST">
+            @csrf
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeResetModal()">Batal</button>
+                <button type="submit" class="btn btn-danger-solid">Ya, Reset Semuanya</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -244,6 +296,7 @@
     .acc-icon.purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
     .acc-icon.green { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
     .acc-icon.pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+    .acc-icon.red { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
     .acc-chevron {
         color: var(--text-muted);
@@ -416,6 +469,131 @@
         font-size: 0.85rem;
         color: #475569;
     }
+
+    /* Danger Zone */
+    .danger-zone {
+        border: 1px dashed rgba(239, 68, 68, 0.3);
+        background: rgba(239, 68, 68, 0.05);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .danger-zone .btn-danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .danger-zone .btn-danger:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-card {
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        transform: scale(0.95) translateY(20px);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-overlay.active .modal-card {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-icon.warning {
+        width: 64px;
+        height: 64px;
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem auto;
+    }
+
+    .modal-title {
+        color: #fff;
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .modal-desc {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .modal-actions .btn {
+        flex: 1;
+        padding: 0.875rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .modal-actions .btn-outline {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+
+    .modal-actions .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .modal-actions .btn-danger-solid {
+        background: #ef4444;
+        border: none;
+        color: #fff;
+    }
+
+    .modal-actions .btn-danger-solid:hover {
+        background: #dc2626;
+        box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+    }
 </style>
 
 <script>
@@ -464,6 +642,24 @@
                 content.style.maxHeight = newHeight + 'px';
             });
         });
+    });
+
+    // Modal Logic
+    function showResetModal() {
+        const modal = document.getElementById('resetConfirmModal');
+        modal.classList.add('active');
+    }
+
+    function closeResetModal() {
+        const modal = document.getElementById('resetConfirmModal');
+        modal.classList.remove('active');
+    }
+
+    // Close on click outside
+    document.getElementById('resetConfirmModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeResetModal();
+        }
     });
 </script>
 @endsection

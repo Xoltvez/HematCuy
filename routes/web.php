@@ -85,7 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/catat-struk/store', [App\Http\Controllers\ReceiptController::class, 'store'])->name('receipt.store');
 
     // Pengaturan & Panduan
-    Route::get('/pengaturan', function() { return view('settings.index'); })->name('settings.index');
+    Route::get('/pengaturan', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/reset-akun', [App\Http\Controllers\SettingsController::class, 'resetAccount'])->name('settings.reset');
     Route::get('/panduan', function() { return view('guide.index'); })->name('guide.index');
 
     // Ubah Password
