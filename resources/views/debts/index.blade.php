@@ -285,14 +285,10 @@
                 <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Tanggal Jatuh Tempo (Opsional)</label>
                 <input type="date" name="due_date" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white; color-scheme: dark;">
             </div>
-
-            <div style="margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                <input type="checkbox" name="affect_balance" value="1" id="affect_balance" style="margin-top: 0.25rem;">
-                <label for="affect_balance" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; cursor: pointer;">
-                    Sesuaikan Saldo Transaksi?<br>
-                    <small style="opacity: 0.7;">Centang ini jika uang tunai/bank Anda benar-benar bertambah (saat hutang) atau berkurang (saat memberi piutang). Jangan centang untuk Paylater.</small>
-                </label>
-            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                *Catatan: Saat Anda menyimpan data ini, sistem akan otomatis mencatatnya sebagai transaksi (memotong atau menambah saldo utama Anda).
+            </p>
 
             <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-weight: 600;">Simpan Catatan</button>
         </form>
