@@ -55,12 +55,6 @@
             </button>
         @endif
         
-        <form action="{{ route('debts.destroy', $debt->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini? Menghapus catatan tidak akan mengembalikan saldo transaksi yang sudah tercatat.');">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
-                Hapus
-            </button>
-        </form>
+        <button type="button" class="btn" onclick="openDeleteModal('{{ route('debts.destroy', $debt->id) }}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">Hapus</button>
     </div>
 </div>
