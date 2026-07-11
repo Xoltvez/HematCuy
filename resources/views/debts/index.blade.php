@@ -13,13 +13,13 @@
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-        padding: 4rem 1rem 1rem 1rem;
+        padding: 1rem;
     }
     .modal-overlay.active {
         opacity: 1;
