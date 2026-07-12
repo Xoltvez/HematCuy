@@ -245,7 +245,14 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return view('transaction_create');
+        $defaultCategories = ['Makanan & Minuman', 'Transportasi', 'Belanja', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Tabungan', 'Gaji', 'Lain-lain'];
+        $customCategories = \App\Models\Transaction::where('user_id', auth()->id())
+            ->whereNotIn('category', $defaultCategories)
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category');
+
+        return view('transaction_create', compact('customCategories'));
     }
 
     /**
@@ -313,7 +320,15 @@ class TransactionController extends Controller
         if ($transaction->user_id !== auth()->id()) {
             abort(403);
         }
-        return view('edit', compact('transaction'));
+
+        $defaultCategories = ['Makanan & Minuman', 'Transportasi', 'Belanja', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Tabungan', 'Gaji', 'Lain-lain'];
+        $customCategories = \App\Models\Transaction::where('user_id', auth()->id())
+            ->whereNotIn('category', $defaultCategories)
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category');
+
+        return view('edit', compact('transaction', 'customCategories'));
     }
 
     /**

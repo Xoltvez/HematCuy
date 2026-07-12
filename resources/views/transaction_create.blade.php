@@ -87,6 +87,13 @@
                         <option value="Tabungan">Tabungan</option>
                         <option value="Gaji">Gaji</option>
                         <option value="Lain-lain">Lain-lain</option>
+                        @if(isset($customCategories) && $customCategories->count() > 0)
+                            <optgroup label="Kategori Saya">
+                                @foreach($customCategories as $cat)
+                                    <option value="{{ $cat }}">{{ $cat }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                         <option value="custom">-- Ketik Baru --</option>
                     </select>
                     <input type="text" id="category_custom" placeholder="Ketik kategori baru..." style="display: none; margin-top: 0.5rem;" required disabled>

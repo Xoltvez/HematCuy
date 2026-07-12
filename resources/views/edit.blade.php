@@ -80,13 +80,21 @@
                     <label for="category">Kategori</label>
                     @php
                         $commonCategories = ['Makanan & Minuman', 'Transportasi', 'Belanja', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Tabungan', 'Gaji', 'Lain-lain'];
-                        $isCustomCategory = !in_array(old('category', $transaction->category), $commonCategories) && old('category', $transaction->category);
+                        $allStandardCats = isset($customCategories) ? collect($commonCategories)->merge($customCategories)->toArray() : $commonCategories;
+                        $isCustomCategory = !in_array(old('category', $transaction->category), $allStandardCats) && old('category', $transaction->category);
                     @endphp
                     <select id="category_select" name="{{ $isCustomCategory ? '' : 'category' }}" required onchange="handleCategoryChange()">
                         <option value="" disabled {{ !old('category', $transaction->category) ? 'selected' : '' }}>-- Pilih Kategori --</option>
                         @foreach($commonCategories as $cat)
                             <option value="{{ $cat }}" {{ old('category', $transaction->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                         @endforeach
+                        @if(isset($customCategories) && $customCategories->count() > 0)
+                            <optgroup label="Kategori Saya">
+                                @foreach($customCategories as $cat)
+                                    <option value="{{ $cat }}" {{ old('category', $transaction->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                         <option value="custom" {{ $isCustomCategory ? 'selected' : '' }}>-- Ketik Baru --</option>
                     </select>
                     <input type="text" id="category_custom" name="{{ $isCustomCategory ? 'category' : '' }}" value="{{ $isCustomCategory ? old('category', $transaction->category) : '' }}" placeholder="Ketik kategori baru..." style="{{ $isCustomCategory ? 'display: block;' : 'display: none;' }} margin-top: 0.5rem;" required {{ $isCustomCategory ? '' : 'disabled' }}>
