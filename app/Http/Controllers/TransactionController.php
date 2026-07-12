@@ -53,7 +53,7 @@ class TransactionController extends Controller
         // Top Categories This Week
         $startOfWeek = now()->startOfWeek()->format('Y-m-d');
         $endOfWeek = now()->endOfWeek()->format('Y-m-d');
-        $weeklyExpenses = $allTransactions->where('type', 'expense')->filter(function($tx) use ($startOfWeek, $endOfWeek) {
+        $weeklyExpenses = $allTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->filter(function($tx) use ($startOfWeek, $endOfWeek) {
             return $tx->date >= $startOfWeek && $tx->date <= $endOfWeek;
         });
         
@@ -73,8 +73,8 @@ class TransactionController extends Controller
             $dateStr = now()->format('Y-m-') . str_pad($i, 2, '0', STR_PAD_LEFT);
             $dayTxs = $monthlyTransactions->where('date', $dateStr);
             $cashflowLabels[] = $i;
-            $cashflowIncome[] = $dayTxs->where('type', 'income')->sum('amount');
-            $cashflowExpense[] = $dayTxs->where('type', 'expense')->sum('amount');
+            $cashflowIncome[] = $dayTxs->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
+            $cashflowExpense[] = $dayTxs->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         }
 
         // Allocations (Savings)
@@ -115,6 +115,7 @@ class TransactionController extends Controller
 
         $expenses = $user->transactions()
             ->where('type', 'expense')
+            ->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])
             ->orderBy('date', 'desc')
             ->get()
             ->groupBy(function($item) {
@@ -176,12 +177,13 @@ class TransactionController extends Controller
         $expensesByCategory = $transactions->where('type', 'expense')
             ->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])
             ->groupBy('category')
-            ->map(function ($group) {
+            ->map(function ($group, $key) {
                 return [
+                    'category' => $key ?: 'Lainnya',
                     'amount' => $group->sum('amount'),
                     'count'  => $group->count(),
                 ];
-            });
+            })->sortByDesc('amount');
 
         $incomesByCategory = $transactions->where('type', 'income')
             ->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])
