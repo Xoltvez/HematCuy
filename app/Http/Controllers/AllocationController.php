@@ -67,7 +67,7 @@ class AllocationController extends Controller
         // Total All Spent (semua pengeluaran di bulan ini)
         $totalSpent = auth()->user()->transactions()
                 ->where('type', 'expense')
-                ->whereNotIn('category', ['Tabungan Ekstra', 'Pembelian Wishlist'])
+                ->whereNotIn('category', ['Tabungan Ekstra', 'Pembelian Wishlist', 'Hutang/Piutang'])
                 ->where('date', 'like', $currentMonth . '%')
                 ->sum('amount');
         

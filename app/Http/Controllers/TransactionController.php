@@ -27,12 +27,12 @@ class TransactionController extends Controller
         });
 
         // This Month
-        $totalIncome = $monthlyTransactions->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
-        $totalExpense = $monthlyTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $totalIncome = $monthlyTransactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
+        $totalExpense = $monthlyTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
         // Last Month
-        $lastMonthIncome = $lastMonthTransactions->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
-        $lastMonthExpense = $lastMonthTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $lastMonthIncome = $lastMonthTransactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
+        $lastMonthExpense = $lastMonthTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
         // Percentages
         $incomeChange = $lastMonthIncome > 0 ? (($totalIncome - $lastMonthIncome) / $lastMonthIncome) * 100 : ($totalIncome > 0 ? 100 : 0);
@@ -164,8 +164,8 @@ class TransactionController extends Controller
             return \Carbon\Carbon::parse($date)->format('Y');
         })->unique()->sortDesc()->values();
         
-        $totalIncome = $transactions->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
-        $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $totalIncome = $transactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
+        $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
         $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
                      - $transactions->where('account', 'cash')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
@@ -174,7 +174,7 @@ class TransactionController extends Controller
                      - $transactions->where('account', 'bank')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
         
         $expensesByCategory = $transactions->where('type', 'expense')
-            ->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])
+            ->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])
             ->groupBy('category')
             ->map(function ($group) {
                 return [
@@ -184,7 +184,7 @@ class TransactionController extends Controller
             });
 
         $incomesByCategory = $transactions->where('type', 'income')
-            ->where('category', '!=', 'Tabungan Ekstra')
+            ->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])
             ->groupBy('category')
             ->map(function ($group) {
                 return [
@@ -215,8 +215,8 @@ class TransactionController extends Controller
 
         $transactions = $query->get();
 
-        $totalIncome = $transactions->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
-        $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $totalIncome = $transactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
+        $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
         $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
                      - $transactions->where('account', 'cash')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
