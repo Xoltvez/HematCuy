@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
     // Alokasi Uang
     Route::get('/budgeting', [App\Http\Controllers\AllocationController::class, 'index'])->name('allocations.index');
     Route::post('/budgeting', [App\Http\Controllers\AllocationController::class, 'store'])->name('allocations.store');
+    Route::put('/budgeting/{id}', [App\Http\Controllers\AllocationController::class, 'update'])->name('allocations.update');
     Route::post('/budgeting/salary', [App\Http\Controllers\AllocationController::class, 'saveSalary'])->name('allocations.salary');
     Route::delete('/budgeting/{id}', [App\Http\Controllers\AllocationController::class, 'destroy'])->name('allocations.destroy');
     Route::post('/budget', [TransactionController::class, 'updateBudget'])->name('budget.update');

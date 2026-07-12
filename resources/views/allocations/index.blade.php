@@ -102,14 +102,19 @@
                         <div class="premium-glow-card {{ $pulseClass }}" style="background: {{ $cardBg }}; border: {{ $cardBorder }}; border-radius: var(--radius-lg); padding: 1.25rem; position: relative; transition: all 0.3s ease;">
                             
                             @if(!$isTabungan)
-                            <!-- Delete Button -->
-                            <form action="{{ route('allocations.destroy', $item['id']) }}" method="POST" style="position: absolute; top: 1rem; right: 1rem;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="confirmDelete(event, this.closest('form'), 'Hapus pos alokasi ini?');" style="color: var(--text-muted);">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                            <!-- Action Buttons -->
+                            <div style="position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.5rem; align-items: center;">
+                                <button type="button" class="btn-edit" onclick="openEditModal({{ $item['id'] }}, '{{ addslashes($item['category_name']) }}', {{ $item['amount'] }})" style="background: none; border: none; padding: 0.25rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='var(--text-muted)'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                                 </button>
-                            </form>
+                                <form action="{{ route('allocations.destroy', $item['id']) }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-delete" onclick="confirmDelete(event, this.closest('form'), 'Hapus pos alokasi ini?');" style="background: none; border: none; padding: 0.25rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--text-muted)'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                    </button>
+                                </form>
+                            </div>
                             @endif
 
                             <div style="margin-bottom: 1rem;">
@@ -196,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupFormatting('salary_display', 'salary');
     setupFormatting('amount_display', 'amount');
+    setupFormatting('edit_amount_display', 'edit_amount');
     
     // Animate budgeting progress bars
     setTimeout(() => {
@@ -205,5 +211,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 200);
 });
+
+function openEditModal(id, category, amount) {
+    document.getElementById('editAllocationForm').action = '/budgeting/' + id;
+    document.getElementById('edit_category_name').value = category;
+    document.getElementById('edit_amount').value = amount;
+    document.getElementById('edit_amount_display').value = parseInt(amount, 10).toLocaleString('id-ID');
+    document.getElementById('editAllocationModal').classList.add('show');
+}
+
+function closeEditModal() {
+    document.getElementById('editAllocationModal').classList.remove('show');
+}
 </script>
+
+@push('modals')
+<!-- Modal Edit Alokasi -->
+<div class="modal-overlay" id="editAllocationModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>Edit Pos Pengeluaran</h3>
+            <button class="close-modal" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form id="editAllocationForm" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+            @csrf
+            @method('PUT')
+            <div style="margin-bottom: 0.5rem;">
+                <label for="edit_category_name" style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">Kategori Pengeluaran</label>
+                <input type="text" id="edit_category_name" name="category_name" required style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label for="edit_amount_display" style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">Target Anggaran (Rp)</label>
+                <input type="text" id="edit_amount_display" required style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;" inputmode="numeric">
+                <input type="hidden" id="edit_amount" name="amount" required min="0">
+            </div>
+            <button type="submit" class="btn btn-primary" style="background: #10b981; color: #fff; width: 100%; padding: 0.8rem; font-weight: 600; border-radius: var(--radius-md);">Simpan Perubahan</button>
+        </form>
+    </div>
+</div>
+@endpush
 @endsection

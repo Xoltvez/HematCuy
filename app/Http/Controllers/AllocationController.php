@@ -67,7 +67,7 @@ class AllocationController extends Controller
         // Total All Spent (semua pengeluaran di bulan ini)
         $totalSpent = auth()->user()->transactions()
                 ->where('type', 'expense')
-                ->whereNotIn('category', ['Tabungan Ekstra', 'Pembelian Wishlist', 'Hutang/Piutang'])
+                ->whereNotIn('category', ['Tabungan Ekstra', 'Pembelian Wishlist'])
                 ->where('date', 'like', $currentMonth . '%')
                 ->sum('amount');
         
@@ -128,6 +128,23 @@ class AllocationController extends Controller
         $allocation->delete();
 
         return redirect()->route('allocations.index')->with('success', 'Pos pengeluaran berhasil dihapus!');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0'
+        ]);
+
+        $allocation = auth()->user()->allocations()->findOrFail($id);
+        
+        $allocation->update([
+            'category_name' => $request->category_name,
+            'amount' => $request->amount
+        ]);
+
+        return redirect()->route('allocations.index')->with('success', 'Alokasi berhasil diperbarui!');
     }
 
     public function saveSalary(Request $request)
