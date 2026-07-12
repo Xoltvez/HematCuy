@@ -274,10 +274,18 @@ class TransactionController extends Controller
         ]);
 
         $validated['user_id'] = auth()->id();
+        $user = auth()->user();
+
+        if ($validated['type'] === 'expense') {
+            $currentBalance = $user->getAccountBalance($validated['account']);
+            if ($validated['amount'] > $currentBalance) {
+                return back()->with('error', 'Saldo ' . ($validated['account'] == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+            }
+        }
+
         Transaction::create($validated);
 
         if ($validated['type'] === 'expense') {
-            $user = auth()->user();
             if ($user->daily_budget > 0) {
                 $txDate = \Carbon\Carbon::parse($validated['date'])->format('Y-m-d');
                 $today = now()->format('Y-m-d');
@@ -351,6 +359,21 @@ class TransactionController extends Controller
 
         if ($transaction->user_id !== auth()->id()) {
             abort(403);
+        }
+
+        $user = auth()->user();
+        if ($validated['type'] === 'expense') {
+            $currentBalance = $user->getAccountBalance($validated['account']);
+            
+            if ($transaction->type === 'expense' && $transaction->account === $validated['account']) {
+                $currentBalance += $transaction->amount;
+            } elseif ($transaction->type === 'income' && $transaction->account === $validated['account']) {
+                $currentBalance -= $transaction->amount;
+            }
+            
+            if ($validated['amount'] > $currentBalance) {
+                return back()->with('error', 'Saldo ' . ($validated['account'] == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi! Maksimal yang bisa dikeluarkan: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+            }
         }
 
         $transaction->update($validated);

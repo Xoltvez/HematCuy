@@ -38,6 +38,13 @@ class DebtController extends Controller
 
             $user = auth()->user();
             
+            if ($request->type === 'receivable') {
+                $currentBalance = $user->getAccountBalance($request->account);
+                if ($request->amount > $currentBalance) {
+                    return back()->with('error', 'Saldo ' . ($request->account == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi untuk memberikan piutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                }
+            }
+            
             $debt = $user->debts()->create([
                 'type' => $request->type,
                 'person_name' => $request->person_name,
@@ -81,6 +88,14 @@ class DebtController extends Controller
         ]);
 
         $amountToPay = min($request->amount, $debt->amount - $debt->amount_paid);
+
+        if ($debt->type === 'payable') {
+            $user = auth()->user();
+            $currentBalance = $user->getAccountBalance($request->account);
+            if ($amountToPay > $currentBalance) {
+                return back()->with('error', 'Saldo ' . ($request->account == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi untuk membayar hutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+            }
+        }
 
         try {
             DB::beginTransaction();

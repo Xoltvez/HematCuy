@@ -60,6 +60,14 @@ class User extends Authenticatable
         return $this->hasMany(Allocation::class);
     }
 
+    public function getAccountBalance($account)
+    {
+        $transactions = $this->transactions;
+        $income = $transactions->where('account', $account)->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount');
+        $expense = $transactions->where('account', $account)->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        return $income - $expense;
+    }
+
     public function monthlySalaries()
     {
         return $this->hasMany(MonthlySalary::class);
