@@ -3,7 +3,7 @@
 **HematCuy** adalah aplikasi pencatatan keuangan pribadi berbasis web yang dikembangkan menggunakan **Laravel**. Aplikasi ini didesain dengan antarmuka modern, elegan, dan *user-friendly* untuk membantu pengguna melacak pengeluaran, merencanakan anggaran bulanan, dan mencapai tujuan finansial (wishlist) dengan lebih mudah.
 
 ![HematCuy Dashboard](https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg)
-*(Ganti gambar ini dengan screenshot dashboard aplikasi Anda)*
+
 
 ---
 
