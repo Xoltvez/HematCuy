@@ -329,7 +329,6 @@
         </form>
     </div>
 </div>
-@endpush
 
 <script>
     function formatRupiah(input, hiddenId) {
