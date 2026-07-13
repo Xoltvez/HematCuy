@@ -332,7 +332,7 @@
 
                             <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 1rem; margin-top: 0.25rem;">PENGATURAN AKUN</div>
 
-                            <a href="#" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); margin-bottom: 1rem;">
+                            <a href="{{ route('settings.index') }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); margin-bottom: 1rem;">
                                 <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-main);">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
