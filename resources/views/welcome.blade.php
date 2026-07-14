@@ -360,8 +360,8 @@
         /* Card 4: Chatbot */
         .card-quaternary {
             width: 250px;
-            bottom: -5%;
-            left: -2%;
+            top: 45%;
+            right: -5%;
             z-index: 5;
             background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(16px);
