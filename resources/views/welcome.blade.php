@@ -1272,7 +1272,7 @@
                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
                         </svg>
-                        <a href="https://faiz-azzahra-portfolio.vercel.app/" target="_blank" style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--text-main)'" onmouseout="this.style.color='var(--text-muted)'">faiz az-zahra winanto putra</a>
+                        <a href="https://faiz-azzahra-portfolio.vercel.app/" target="_blank" style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--text-main)'" onmouseout="this.style.color='var(--text-muted)'">Faiz Azzahra Winanto Putra</a>
                     </div>
                 </div>
             </div>
