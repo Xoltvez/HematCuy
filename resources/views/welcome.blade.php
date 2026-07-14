@@ -1267,6 +1267,13 @@
                         </svg>
                         <span>hematcuy@gmail.com</span>
                     </div>
+                    <div class="footer-contact">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <a href="https://faiz-azzahra-portfolio.vercel.app/" target="_blank" style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--text-main)'" onmouseout="this.style.color='var(--text-muted)'">faiz az-zahra winanto putra</a>
+                    </div>
                 </div>
             </div>
 
