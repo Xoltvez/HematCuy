@@ -1,5 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Arahkan root domain langsung ke index.php untuk mencegah redirect ke folder /public/
+    RewriteRule ^$ public/index.php [L]
+
+    # Arahkan semua request lainnya ke dalam folder public
+    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
 </IfModule>
