@@ -1,9 +1,18 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
 
-    # Arahkan root domain langsung ke index.php untuk mencegah redirect ke folder /public/
-    RewriteRule ^$ public/index.php [L]
+    # Arahkan file statis (CSS/JS/Images) ke folder public jika file tersebut ada
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
 
-    # Arahkan semua request lainnya ke dalam folder public
-    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+    # Arahkan semua request halaman (rute Laravel) langsung ke file index.php di dalam public
+    # Ini akan mencegah server melakukan redirect otomatis ke URL /public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
