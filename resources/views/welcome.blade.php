@@ -10,13 +10,13 @@
 
     <style>
         :root {
-            --bg-color: #36454F;
+            --bg-color: #09090b;
             --text-main: #FFFFFF;
             --text-muted: #A1A1AA;
             --accent-blue: #3b82f6;
             --accent-dark: #121212;
-            --surface: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --surface: #18181b;
+            --border-color: #27272A;
         }
 
         * {
