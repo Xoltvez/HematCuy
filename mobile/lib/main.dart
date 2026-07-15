@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet.';
+        _errorMessage = 'Gagal terhubung: ${e.toString()}';
       });
     } finally {
       setState(() {
