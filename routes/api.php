@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TransactionApiController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -16,4 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'user' => $request->user()
         ]);
     });
+
+    // Transactions API
+    Route::get('/transactions', [TransactionApiController::class, 'index']);
+    Route::post('/transactions', [TransactionApiController::class, 'store']);
 });
