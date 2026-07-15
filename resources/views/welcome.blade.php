@@ -10,7 +10,7 @@
 
     <style>
         :root {
-            --bg-color: #09090b;
+            --bg-color: #111827;
             --text-main: #FFFFFF;
             --text-muted: #A1A1AA;
             --accent-blue: #3b82f6;

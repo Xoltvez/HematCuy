@@ -1,5 +1,5 @@
 :root {
-    --bg-dark: #09090b;
+    --bg-dark: #111827; /* Ubah ke abu-abu gelap agar tidak terlalu hitam */
     --bg-card: rgba(255, 255, 255, 0.04);
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
