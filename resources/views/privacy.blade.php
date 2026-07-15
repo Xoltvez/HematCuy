@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0A0A0A;
+            --bg-color: #0d1117;
             --text-main: #FFFFFF;
             --text-muted: #A1A1AA;
             --accent-blue: #3b82f6;
