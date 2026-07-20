@@ -965,11 +965,7 @@
     <nav class="animate-fade-in-up">
         <div class="container nav-container">
             <a href="{{ url('/') }}" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4" />
-                    <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
-                    <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z" />
-                </svg>
+                <img src="{{ asset('images/logohematcuy.png') }}" alt="HematCuy Logo" width="24" height="24" style="border-radius: 4px; object-fit: contain;">
                 HematCuy.
             </a>
             <div class="nav-links">
@@ -1248,11 +1244,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="#" class="logo" style="color: white; font-size: 1.5rem; margin-bottom: 1rem; display: inline-flex;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
-                            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4" />
-                            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
-                            <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z" />
-                        </svg>
+                        <img src="{{ asset('images/logohematcuy.png') }}" alt="HematCuy Logo" width="24" height="24" style="border-radius: 4px; object-fit: contain; margin-right: 0.5rem;">
                         HematCuy.
                     </a>
                     <p class="footer-desc">HematCuy adalah sistem mengelola keuangan anda secara terstruktur mulai dari pengeluaran harian, target harian, dan wishlist.</p>
