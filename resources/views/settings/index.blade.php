@@ -705,12 +705,33 @@
     document.addEventListener('DOMContentLoaded', function() {
         const headers = document.querySelectorAll('.accordion-header');
 
-        // Optional: Open the first one by default
-        if(headers.length > 0) {
-            const firstHeader = headers[0];
-            const firstContent = firstHeader.nextElementSibling;
-            firstHeader.setAttribute('aria-expanded', 'true');
-            firstContent.style.maxHeight = firstContent.scrollHeight + 'px';
+        // Optional: Open the first one by default OR check for query param / hash
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        const targetHash = window.location.hash;
+        
+        let targetHeader = null;
+        if (tabParam === 'sumber-dana' || targetHash === '#acc-sumber-dana') {
+            const targetItem = document.getElementById('acc-sumber-dana');
+            if (targetItem) {
+                targetHeader = targetItem.querySelector('.accordion-header');
+            }
+        }
+        
+        if (!targetHeader && headers.length > 0) {
+            targetHeader = headers[0];
+        }
+
+        if(targetHeader) {
+            const content = targetHeader.nextElementSibling;
+            targetHeader.setAttribute('aria-expanded', 'true');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            
+            if (tabParam === 'sumber-dana' || targetHash === '#acc-sumber-dana') {
+                setTimeout(() => {
+                    targetHeader.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 150);
+            }
         }
 
         headers.forEach(header => {
