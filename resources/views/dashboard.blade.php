@@ -37,7 +37,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </div>
             
-            <div id="balanceDropdownMenu" style="position: absolute; top: 100%; left: -0.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);">
+            <div id="balanceDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 100%; left: -0.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 180px; max-height: 200px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);">
                 <div class="dropdown-item active" data-value="total" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; transition: all 0.2s;">Total Saldo</div>
                 <div class="dropdown-item" data-value="cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; color: var(--text-muted); transition: all 0.2s;">Saldo Tunai</div>
                 <div class="dropdown-item" data-value="bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; color: var(--text-muted); transition: all 0.2s;">Saldo Bank</div>
@@ -314,6 +314,20 @@
 #balanceDropdownTrigger:hover { background: rgba(255,255,255,0.05); color: #fff !important; }
 .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff !important; }
 .dropdown-item.active { background: rgba(59, 130, 246, 0.15); color: #3b82f6 !important; font-weight: 600; }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
 </style>
 
 <!-- Chart JS -->
