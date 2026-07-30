@@ -18,6 +18,33 @@
     </div>
 
     <style>
+        #cashDropdownTrigger:hover, #bankDropdownTrigger:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff !important;
+        }
+        .cash-dropdown-item:hover, .bank-dropdown-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff !important;
+        }
+        .cash-dropdown-item.active, .bank-dropdown-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6 !important;
+            font-weight: 600;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-md);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
         .custom-filter-select {
             appearance: none;
             -webkit-appearance: none;
@@ -222,24 +249,72 @@
     <!-- Summary Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
         
-        <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+        <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem; position: relative;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; display: flex; align-items: center; justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                    </div>
+                    <div id="cashDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); user-select: none;">
+                        <span id="cashDropdownLabel">Saldo Tunai</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
                 </div>
-                <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Saldo Tunai</div>
+                
+                <div id="cashDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 3.5rem; left: 1.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);">
+                    <div class="cash-dropdown-item active" data-value="total_cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Tunai</div>
+                    <div class="cash-dropdown-item" data-value="cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Tunai Utama</div>
+                    @if(auth()->check() && auth()->user()->accounts->where('type', 'cash')->count() > 0)
+                        @foreach(auth()->user()->accounts->where('type', 'cash') as $acc)
+                            <div class="cash-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
-            <div class="card-info-amount" data-original="Rp {{ number_format($balanceCash, 0, ',', '.') }}" style="font-size: 1.75rem; font-weight: 700; color: #fff; letter-spacing: -0.5px;">Rp {{ number_format($balanceCash, 0, ',', '.') }}</div>
+            <div id="cashBalanceAmount" class="card-info-amount" 
+                data-original="Rp {{ number_format($balanceCash, 0, ',', '.') }}" 
+                data-total_cash="Rp {{ number_format($balanceCash, 0, ',', '.') }}" 
+                data-cash="Rp {{ number_format(auth()->user()->getAccountBalance('cash'), 0, ',', '.') }}" 
+                @if(auth()->check() && auth()->user()->accounts->where('type', 'cash')->count() > 0)
+                    @foreach(auth()->user()->accounts->where('type', 'cash') as $acc)
+                        data-custom_{{ \Illuminate\Support\Str::slug($acc->name) }}="Rp {{ number_format(auth()->user()->getAccountBalance($acc->name), 0, ',', '.') }}"
+                    @endforeach
+                @endif
+                style="font-size: 1.75rem; font-weight: 700; color: #fff; letter-spacing: -0.5px;">Rp {{ number_format($balanceCash, 0, ',', '.') }}</div>
         </div>
         
-        <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(167, 139, 250, 0.1); color: #a78bfa; display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem; position: relative;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(167, 139, 250, 0.1); color: #a78bfa; display: flex; align-items: center; justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    </div>
+                    <div id="bankDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); user-select: none;">
+                        <span id="bankDropdownLabel">Saldo Bank</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
                 </div>
-                <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Saldo Bank</div>
+                
+                <div id="bankDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 3.5rem; left: 1.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);">
+                    <div class="bank-dropdown-item active" data-value="total_bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Bank</div>
+                    <div class="bank-dropdown-item" data-value="bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Bank Utama</div>
+                    @if(auth()->check() && auth()->user()->accounts->where('type', 'bank')->count() > 0)
+                        @foreach(auth()->user()->accounts->where('type', 'bank') as $acc)
+                            <div class="bank-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
-            <div class="card-info-amount" data-original="Rp {{ number_format($balanceBank, 0, ',', '.') }}" style="font-size: 1.75rem; font-weight: 700; color: #fff; letter-spacing: -0.5px;">Rp {{ number_format($balanceBank, 0, ',', '.') }}</div>
+            <div id="bankBalanceAmount" class="card-info-amount" 
+                data-original="Rp {{ number_format($balanceBank, 0, ',', '.') }}" 
+                data-total_bank="Rp {{ number_format($balanceBank, 0, ',', '.') }}" 
+                data-bank="Rp {{ number_format(auth()->user()->getAccountBalance('bank'), 0, ',', '.') }}" 
+                @if(auth()->check() && auth()->user()->accounts->where('type', 'bank')->count() > 0)
+                    @foreach(auth()->user()->accounts->where('type', 'bank') as $acc)
+                        data-custom_{{ \Illuminate\Support\Str::slug($acc->name) }}="Rp {{ number_format(auth()->user()->getAccountBalance($acc->name), 0, ',', '.') }}"
+                    @endforeach
+                @endif
+                style="font-size: 1.75rem; font-weight: 700; color: #fff; letter-spacing: -0.5px;">Rp {{ number_format($balanceBank, 0, ',', '.') }}</div>
         </div>
         
         <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem;">
@@ -788,6 +863,67 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         updateUI('semua');
     }
+
+    // Custom Dropdown for Cash Balance
+    const cashTrigger = document.getElementById('cashDropdownTrigger');
+    const cashMenu = document.getElementById('cashDropdownMenu');
+    const cashLabel = document.getElementById('cashDropdownLabel');
+    const cashItems = document.querySelectorAll('.cash-dropdown-item');
+    const cashAmount = document.getElementById('cashBalanceAmount');
+
+    if (cashTrigger && cashMenu) {
+        cashTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cashMenu.style.display = cashMenu.style.display === 'flex' ? 'none' : 'flex';
+            if (typeof bankMenu !== 'undefined' && bankMenu) bankMenu.style.display = 'none';
+        });
+
+        cashItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const val = item.getAttribute('data-value');
+                cashLabel.innerText = item.innerText;
+                cashItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const newAmt = cashAmount.getAttribute('data-' + val);
+                cashAmount.setAttribute('data-original', newAmt);
+                updateBalanceVisibility();
+            });
+        });
+    }
+
+    // Custom Dropdown for Bank Balance
+    const bankTrigger = document.getElementById('bankDropdownTrigger');
+    const bankMenu = document.getElementById('bankDropdownMenu');
+    const bankLabel = document.getElementById('bankDropdownLabel');
+    const bankItems = document.querySelectorAll('.bank-dropdown-item');
+    const bankAmount = document.getElementById('bankBalanceAmount');
+
+    if (bankTrigger && bankMenu) {
+        bankTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            bankMenu.style.display = bankMenu.style.display === 'flex' ? 'none' : 'flex';
+            if (typeof cashMenu !== 'undefined' && cashMenu) cashMenu.style.display = 'none';
+        });
+
+        bankItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const val = item.getAttribute('data-value');
+                bankLabel.innerText = item.innerText;
+                bankItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const newAmt = bankAmount.getAttribute('data-' + val);
+                bankAmount.setAttribute('data-original', newAmt);
+                updateBalanceVisibility();
+            });
+        });
+    }
+
+    document.addEventListener('click', () => {
+        if (cashMenu) cashMenu.style.display = 'none';
+        if (bankMenu) bankMenu.style.display = 'none';
+    });
 });
 </script>
 @endsection
