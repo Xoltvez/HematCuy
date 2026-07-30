@@ -266,10 +266,10 @@
                                 <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">{{ $acc->name }}</div>
                                 <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $acc->type === 'cash' ? 'Tipe: Tunai' : 'Tipe: Bank' }}</div>
                             </div>
-                            <form action="{{ route('settings.accounts.destroy', $acc->id) }}" method="POST" style="margin: 0;">
+                            <form id="delete-account-form-{{ $acc->id }}" action="{{ route('settings.accounts.destroy', $acc->id) }}" method="POST" style="margin: 0;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" style="background: none; border: none; color: #fb7185; cursor: pointer; font-size: 0.85rem; font-weight: 600;" onclick="return confirm('Hapus sumber dana ini?')">Hapus</button>
+                                <button type="button" class="btn-delete-account" data-id="{{ $acc->id }}" style="background: none; border: none; color: #fb7185; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Hapus</button>
                             </form>
                         </div>
                         @endforeach
@@ -792,10 +792,59 @@
     }
 
     function confirmReset() {
-        if (confirm('PERINGATAN: Semua data transaksi, catatan, dan alokasi Anda akan dihapus permanen. Apakah Anda yakin ingin memulai dari awal?')) {
-            document.getElementById('reset-form').submit();
-        }
+        Swal.fire({
+            title: 'Hapus Semua Data?',
+            text: 'PERINGATAN: Semua data transaksi, catatan, dan alokasi Anda akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: 'rgba(255, 255, 255, 0.1)',
+            confirmButtonText: 'Ya, Hapus Semua!',
+            cancelButtonText: 'Batal',
+            background: 'rgba(15, 23, 42, 0.95)',
+            color: '#f8fafc',
+            backdrop: 'rgba(15, 23, 42, 0.4)',
+            customClass: {
+                popup: 'hematcuy-swal-popup',
+                title: 'hematcuy-swal-title',
+                htmlContainer: 'hematcuy-swal-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('reset-form').submit();
+            }
+        });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-delete-account').forEach(button => {
+            button.addEventListener('click', function() {
+                const accountId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Hapus Sumber Dana?',
+                    text: 'Apakah Anda yakin ingin menghapus sumber dana ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: 'rgba(255, 255, 255, 0.1)',
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    background: 'rgba(15, 23, 42, 0.95)',
+                    color: '#f8fafc',
+                    backdrop: 'rgba(15, 23, 42, 0.4)',
+                    customClass: {
+                        popup: 'hematcuy-swal-popup',
+                        title: 'hematcuy-swal-title',
+                        htmlContainer: 'hematcuy-swal-text'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-account-form-' + accountId).submit();
+                    }
+                });
+            });
+        });
+    });
 
     // Notification Settings AJAX
     function updateSetting(key, value) {
