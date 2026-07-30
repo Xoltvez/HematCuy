@@ -79,5 +79,21 @@
                 title: "{!! addslashes($errors->first()) !!}"
             });
         @endif
+
+        // Expose Toast globally
+        window.HematCuyToast = Toast;
+
+        // Listen to PDF/Print downloads
+        document.addEventListener('click', function(event) {
+            const downloadLink = event.target.closest('a[href*="/pdf"], a[href*="/export/pdf"], .btn-pdf-download');
+            if (downloadLink) {
+                setTimeout(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Berhasil di download'
+                    });
+                }, 1000);
+            }
+        });
     });
 </script>
