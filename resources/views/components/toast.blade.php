@@ -122,7 +122,129 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "{{ route('transactions.create') }}";
+                        Swal.fire({
+                            title: 'Masukkan Saldo Awal',
+                            html: `
+                                <div style="text-align: left; margin-top: 1rem;">
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.5rem;">Nominal Saldo (Rp)</label>
+                                        <input type="text" id="swal_amount_display" placeholder="Misal: 100.000" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.2); color: #fff; font-size: 1.1rem; font-weight: 600; outline: none; box-sizing: border-box;" inputmode="numeric">
+                                        <input type="hidden" id="swal_amount">
+                                    </div>
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.5rem;">Sumber Dana</label>
+                                        <select id="swal_account" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: #0f172a; color: #fff; font-size: 1rem; outline: none; box-sizing: border-box;">
+                                            <option value="cash">Tunai (Dompet)</option>
+                                            <option value="bank">Bank / E-Wallet</option>
+                                            @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                                                @foreach(auth()->user()->accounts as $acc)
+                                                    <option value="{{ $acc->name }}">{{ $acc->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonColor: '#10b981',
+                            cancelButtonColor: 'rgba(255, 255, 255, 0.1)',
+                            confirmButtonText: 'Simpan Saldo',
+                            cancelButtonText: 'Batal',
+                            background: 'rgba(15, 23, 42, 0.95)',
+                            color: '#f8fafc',
+                            backdrop: 'rgba(15, 23, 42, 0.4)',
+                            customClass: {
+                                popup: 'hematcuy-swal-popup',
+                                title: 'hematcuy-swal-title',
+                                htmlContainer: 'hematcuy-swal-text'
+                            },
+                            didOpen: () => {
+                                const amountDisplay = Swal.getPopup().querySelector('#swal_amount_display');
+                                const amountHidden = Swal.getPopup().querySelector('#swal_amount');
+                                amountDisplay.focus();
+                                amountDisplay.addEventListener('input', function(e) {
+                                    let value = this.value.replace(/[^0-9]/g, '');
+                                    amountHidden.value = value;
+                                    if(value) {
+                                        this.value = parseInt(value, 10).toLocaleString('id-ID');
+                                    } else {
+                                        this.value = '';
+                                    }
+                                });
+                            },
+                            preConfirm: () => {
+                                const amount = Swal.getPopup().querySelector('#swal_amount').value;
+                                const account = Swal.getPopup().querySelector('#swal_account').value;
+                                if (!amount || parseInt(amount, 10) <= 0) {
+                                    Swal.showValidationMessage(`Silakan masukkan nominal saldo awal yang valid!`);
+                                    return false;
+                                }
+                                return { amount: amount, account: account };
+                            }
+                        }).then((inputResult) => {
+                            if (inputResult.isConfirmed) {
+                                const form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = "{{ route('transactions.store') }}";
+                                
+                                const csrfInput = document.createElement('input');
+                                csrfInput.type = 'hidden';
+                                csrfInput.name = '_token';
+                                csrfInput.value = "{{ csrf_token() }}";
+                                form.appendChild(csrfInput);
+
+                                const titleInput = document.createElement('input');
+                                titleInput.type = 'hidden';
+                                titleInput.name = 'title';
+                                titleInput.value = 'Saldo Awal';
+                                form.appendChild(titleInput);
+
+                                const amountInput = document.createElement('input');
+                                amountInput.type = 'hidden';
+                                amountInput.name = 'amount';
+                                amountInput.value = inputResult.value.amount;
+                                form.appendChild(amountInput);
+
+                                const typeInput = document.createElement('input');
+                                typeInput.type = 'hidden';
+                                typeInput.name = 'type';
+                                typeInput.value = 'income';
+                                form.appendChild(typeInput);
+
+                                const accountInput = document.createElement('input');
+                                accountInput.type = 'hidden';
+                                accountInput.name = 'account';
+                                accountInput.value = inputResult.value.account;
+                                form.appendChild(accountInput);
+
+                                const categoryInput = document.createElement('input');
+                                categoryInput.type = 'hidden';
+                                categoryInput.name = 'category';
+                                categoryInput.value = 'Gaji';
+                                form.appendChild(categoryInput);
+
+                                const descInput = document.createElement('input');
+                                descInput.type = 'hidden';
+                                descInput.name = 'description';
+                                descInput.value = 'Mengisi saldo awal saat pendaftaran akun baru.';
+                                form.appendChild(descInput);
+
+                                const dateInput = document.createElement('input');
+                                dateInput.type = 'hidden';
+                                dateInput.name = 'date';
+                                dateInput.value = new Date().toISOString().slice(0, 10);
+                                form.appendChild(dateInput);
+
+                                const timeInput = document.createElement('input');
+                                timeInput.type = 'hidden';
+                                timeInput.name = 'time';
+                                timeInput.value = new Date().toTimeString().slice(0, 5);
+                                form.appendChild(timeInput);
+
+                                document.body.appendChild(form);
+                                form.submit();
+                            }
+                        });
                     }
                 });
             }, 800);
