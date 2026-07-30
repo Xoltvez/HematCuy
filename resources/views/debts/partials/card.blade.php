@@ -55,6 +55,10 @@
             </button>
         @endif
         
+        <button type="button" class="btn" onclick="openEditModal({{ $debt->id }}, '{{ addslashes($debt->person_name) }}', {{ $debt->amount }}, '{{ $debt->due_date ?? '' }}', '{{ $debt->account }}', {{ $debt->amount_paid }})" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md); cursor: pointer;">
+            Edit
+        </button>
+
         <form action="{{ route('debts.destroy', $debt->id) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')

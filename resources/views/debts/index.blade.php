@@ -340,6 +340,56 @@
     </div>
 </div>
 
+<!-- Modal Edit Data -->
+<div class="modal-overlay" id="editDebtModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>Edit Hutang/Piutang</h3>
+            <button class="close-modal" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form id="editDebtForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Nama Orang / Instansi</label>
+                <input type="text" name="person_name" id="edit_person_name" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="Cth: Budi" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" required>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Jumlah Uang (Rp)</label>
+                <input type="text" id="editDebtAmountDisplay" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" placeholder="0" oninput="formatRupiah(this, 'editDebtAmountReal')" required>
+                <input type="hidden" name="amount" id="editDebtAmountReal" required>
+                <small id="edit_amount_warning" style="color: #f59e0b; display: none; margin-top: 0.5rem; font-size: 0.8rem; font-weight: 500;"></small>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Sumber/Tujuan Dana</label>
+                <select name="account" id="edit_account" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
+                    <option value="cash" style="background: #1a1a1a; color: white;">Tunai</option>
+                    <option value="bank" style="background: #1a1a1a; color: white;">Bank/E-Wallet</option>
+                    @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                        @foreach(auth()->user()->accounts as $acc)
+                            <option value="{{ $acc->name }}" style="background: #1a1a1a; color: white;">{{ $acc->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Tanggal Jatuh Tempo (Opsional)</label>
+                <input type="date" placeholder="yy:mm:dd" name="due_date" id="edit_due_date" class="form-control custom-filter-date" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white; color-scheme: dark;">
+            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                *Catatan: Mengubah jumlah uang atau sumber/tujuan dana akan otomatis menyesuaikan transaksi awal yang tercatat.
+            </p>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-weight: 600;">Simpan Perubahan</button>
+        </form>
+    </div>
+</div>
+
 <script>
     function formatRupiah(input, hiddenId) {
         let val = input.value.replace(/[^0-9]/g, '');
@@ -383,6 +433,32 @@
 
     function closePayModal() {
         document.getElementById('payDebtModal').classList.remove('active');
+    }
+
+    function openEditModal(id, person_name, amount, due_date, account, amount_paid) {
+        document.getElementById('editDebtForm').action = '/debts/' + id;
+        document.getElementById('edit_person_name').value = person_name;
+        
+        document.getElementById('editDebtAmountReal').value = amount;
+        document.getElementById('editDebtAmountDisplay').value = parseInt(amount, 10).toLocaleString('id-ID');
+        
+        document.getElementById('edit_account').value = account;
+        document.getElementById('edit_due_date').value = due_date || '';
+        
+        const warningEl = document.getElementById('edit_amount_warning');
+        if (amount_paid > 0) {
+            warningEl.innerText = '*Catatan: Sudah dibayar Rp ' + parseInt(amount_paid, 10).toLocaleString('id-ID') + '. Jumlah minimal edit adalah nominal tersebut.';
+            warningEl.style.display = 'block';
+            document.getElementById('editDebtAmountDisplay').setAttribute('min', amount_paid);
+        } else {
+            warningEl.style.display = 'none';
+        }
+        
+        document.getElementById('editDebtModal').classList.add('active');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editDebtModal').classList.remove('active');
     }
 
 

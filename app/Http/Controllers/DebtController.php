@@ -143,6 +143,90 @@ class DebtController extends Controller
         }
     }
 
+    public function update(Request $request, Debt $debt)
+    {
+        if ($debt->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
+        $request->validate([
+            'person_name' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:' . $debt->amount_paid,
+            'due_date' => 'nullable|date',
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)]
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Find the original transaction created when this debt was stored
+            $transaction = Transaction::where('user_id', $user->id)
+                ->where('category', 'Hutang/Piutang')
+                ->where('type', $debt->type === 'payable' ? 'income' : 'expense')
+                ->where('amount', $debt->amount)
+                ->where('account', $debt->account)
+                ->where('title', 'like', '%' . $debt->person_name . '%')
+                ->first();
+
+            // Check balance if they are changing amount / account
+            if ($debt->type === 'receivable') {
+                $currentBalance = $user->getAccountBalance($request->account);
+                if ($debt->account === $request->account) {
+                    $currentBalance += $debt->amount;
+                }
+                if ($request->amount > $currentBalance) {
+                    $accLabel = $request->account == 'cash' ? 'Tunai' : ($request->account == 'bank' ? 'Bank/E-Wallet' : $request->account);
+                    return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                }
+            } else {
+                if ($debt->account === $request->account) {
+                    $currentBalance = $user->getAccountBalance($debt->account);
+                    $difference = $debt->amount - $request->amount;
+                    if ($difference > 0 && $difference > $currentBalance) {
+                        $accLabel = $debt->account == 'cash' ? 'Tunai' : ($debt->account == 'bank' ? 'Bank/E-Wallet' : $debt->account);
+                        return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi untuk melakukan penyesuaian pengurangan hutang!')->withInput();
+                    }
+                }
+            }
+
+            // Update transaction if found
+            if ($transaction) {
+                $transaction->update([
+                    'amount' => $request->amount,
+                    'account' => $request->account,
+                    'title' => ($debt->type === 'payable' ? 'Pinjaman dari ' : 'Pinjaman ke ') . $request->person_name,
+                ]);
+            }
+
+            // Update debt
+            $debt->person_name = $request->person_name;
+            $debt->amount = $request->amount;
+            $debt->due_date = $request->due_date;
+            $debt->account = $request->account;
+
+            // Recalculate status based on amount_paid vs new amount
+            if ($debt->amount_paid >= $debt->amount) {
+                $debt->status = 'paid';
+            } elseif ($debt->amount_paid > 0) {
+                $debt->status = 'partially_paid';
+            } else {
+                $debt->status = 'unpaid';
+            }
+
+            $debt->save();
+
+            DB::commit();
+
+            return redirect()->route('debts.index')->with('success', 'Catatan hutang/piutang berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('debts.index')->with('error', 'Terjadi kesalahan saat memperbarui data.');
+        }
+    }
+
     public function destroy(Debt $debt)
     {
         if ($debt->user_id !== auth()->id()) {

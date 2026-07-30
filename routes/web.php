@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/debts', [App\Http\Controllers\DebtController::class, 'store'])->name('debts.store');
     Route::post('/debts/{debt}/pay', [App\Http\Controllers\DebtController::class, 'pay'])->name('debts.pay');
     Route::delete('/debts/{debt}', [App\Http\Controllers\DebtController::class, 'destroy'])->name('debts.destroy');
+    Route::put('/debts/{debt}', [App\Http\Controllers\DebtController::class, 'update'])->name('debts.update');
 
     // Tabungan & Wishlist
     Route::get('/tabungan', [App\Http\Controllers\WishlistController::class, 'index'])->name('wishlists.index');
