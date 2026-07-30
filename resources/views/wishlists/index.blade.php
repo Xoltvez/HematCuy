@@ -217,12 +217,14 @@
 
                 <!-- Action Button -->
                 @if($item['percentage'] >= 100)
-                <button type="button" onclick="openPurchaseModal({{ $item['id'] }}, '{{ addslashes($item['name']) }}')" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; border-radius: 9999px; padding: 0.65rem; width: 100%; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                    🛍️ Tandai Sudah Dibeli
+                <button type="button" onclick="openPurchaseModal({{ $item['id'] }}, '{{ addslashes($item['name']) }}')" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; border-radius: 9999px; padding: 0.65rem; width: 100%; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    Tandai Sudah Dibeli
                 </button>
                 @else
-                <button type="button" onclick="openAllocateModal({{ $item['id'] }}, '{{ addslashes($item['name']) }}', {{ $item['price'] - $item['saved_amount'] }})" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #3b82f6; border-radius: 9999px; padding: 0.65rem; width: 100%; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                    💰 Isi Tabungan
+                <button type="button" onclick="openAllocateModal({{ $item['id'] }}, '{{ addslashes($item['name']) }}', {{ $item['price'] - $item['saved_amount'] }})" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #3b82f6; border-radius: 9999px; padding: 0.65rem; width: 100%; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    Isi Tabungan
                 </button>
                 @endif
             </div>
@@ -400,7 +402,8 @@
             </svg>
         </button>
         <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
-            💰 Isi Tabungan
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            Isi Tabungan
         </h3>
 
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;" id="allocateWishlistText"></p>
