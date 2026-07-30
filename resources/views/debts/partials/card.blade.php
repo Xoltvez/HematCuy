@@ -48,21 +48,21 @@
         <span>Sisa: Rp {{ number_format($debt->amount - $debt->amount_paid, 0, ',', '.') }}</span>
     </div>
 
-    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: flex-end; align-items: stretch;">
         @if($debt->status !== 'paid')
-            <button class="btn btn-primary" onclick="openPayModal({{ $debt->id }}, {{ $debt->amount - $debt->amount_paid }})" style="padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md);">
+            <button class="btn btn-primary" onclick="openPayModal({{ $debt->id }}, {{ $debt->amount - $debt->amount_paid }})" style="padding: 0.5rem 1.2rem; font-size: 0.9rem; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2;">
                 {{ $debt->type === 'payable' ? 'Bayar Cicilan/Lunas' : 'Terima Uang/Lunas' }}
             </button>
         @endif
         
-        <button type="button" class="btn" onclick="openEditModal({{ $debt->id }}, '{{ addslashes($debt->person_name) }}', {{ $debt->amount }}, '{{ $debt->due_date ?? '' }}', '{{ $debt->account }}', {{ $debt->amount_paid }})" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md); cursor: pointer;">
+        <button type="button" class="btn" onclick="openEditModal({{ $debt->id }}, '{{ addslashes($debt->person_name) }}', {{ $debt->amount }}, '{{ $debt->due_date ?? '' }}', '{{ $debt->account }}', {{ $debt->amount_paid }})" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.5rem 1.2rem; font-size: 0.9rem; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; justify-content: center;">
             Edit
         </button>
 
-        <form action="{{ route('debts.destroy', $debt->id) }}" method="POST" style="display:inline;">
+        <form action="{{ route('debts.destroy', $debt->id) }}" method="POST" style="display: flex; margin: 0;">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn" onclick="confirmDelete(event, this.closest('form'), 'Apakah Anda yakin ingin menghapus catatan ini? Menghapus catatan tidak akan mengembalikan saldo transaksi yang sudah tercatat.');" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.5rem 1rem; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">Hapus</button>
+            <button type="submit" class="btn" onclick="confirmDelete(event, this.closest('form'), 'Apakah Anda yakin ingin menghapus catatan ini? Menghapus catatan tidak akan mengembalikan saldo transaksi yang sudah tercatat.');" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.5rem 1.2rem; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2); height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer;">Hapus</button>
         </form>
     </div>
 </div>
