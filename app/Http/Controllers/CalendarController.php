@@ -32,6 +32,13 @@ class CalendarController extends Controller
             ->whereMonth('due_date', $month)
             ->get();
 
+        // Get debts/loans with due date for the current month
+        $debts = auth()->user()->debts()
+            ->whereNotNull('due_date')
+            ->whereYear('due_date', $year)
+            ->whereMonth('due_date', $month)
+            ->get();
+
         // Group transactions by day (Y-m-d)
         $dailyData = [];
         foreach ($transactions as $t) {
@@ -41,7 +48,8 @@ class CalendarController extends Controller
                     'income' => 0,
                     'expense' => 0,
                     'transactions' => [],
-                    'notes' => []
+                    'notes' => [],
+                    'debts' => []
                 ];
             }
             if ($t->type === 'income') {
@@ -60,10 +68,26 @@ class CalendarController extends Controller
                     'income' => 0,
                     'expense' => 0,
                     'transactions' => [],
-                    'notes' => []
+                    'notes' => [],
+                    'debts' => []
                 ];
             }
             $dailyData[$date]['notes'][] = $note;
+        }
+
+        // Add debts to dailyData
+        foreach ($debts as $debt) {
+            $date = Carbon::parse($debt->due_date)->format('Y-m-d');
+            if (!isset($dailyData[$date])) {
+                $dailyData[$date] = [
+                    'income' => 0,
+                    'expense' => 0,
+                    'transactions' => [],
+                    'notes' => [],
+                    'debts' => []
+                ];
+            }
+            $dailyData[$date]['debts'][] = $debt;
         }
 
         // Build the calendar grid
@@ -88,7 +112,8 @@ class CalendarController extends Controller
                 'expense' => 0,
                 'net' => 0,
                 'transactions' => [],
-                'notes' => []
+                'notes' => [],
+                'debts' => []
             ];
             $prevMonthDate->addDay();
         }
@@ -101,6 +126,7 @@ class CalendarController extends Controller
             $expense = $dailyData[$dateStr]['expense'] ?? 0;
             $dayTransactions = $dailyData[$dateStr]['transactions'] ?? [];
             $dayNotes = $dailyData[$dateStr]['notes'] ?? [];
+            $dayDebts = $dailyData[$dateStr]['debts'] ?? [];
 
             $calendar[] = [
                 'date' => $dateStr,
@@ -110,7 +136,8 @@ class CalendarController extends Controller
                 'expense' => $expense,
                 'net' => $income - $expense,
                 'transactions' => $dayTransactions,
-                'notes' => $dayNotes
+                'notes' => $dayNotes,
+                'debts' => $dayDebts
             ];
             $currentMonthDate->addDay();
         }
@@ -128,7 +155,8 @@ class CalendarController extends Controller
                     'expense' => 0,
                     'net' => 0,
                     'transactions' => [],
-                    'notes' => []
+                    'notes' => [],
+                    'debts' => []
                 ];
                 $nextMonthDate->addDay();
             }

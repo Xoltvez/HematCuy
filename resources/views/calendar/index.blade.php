@@ -393,14 +393,14 @@
             @endphp
 
             @php
-            $hasData = count($dayData['transactions'] ?? []) > 0 || count($dayData['notes'] ?? []) > 0;
+            $hasData = count($dayData['transactions'] ?? []) > 0 || count($dayData['notes'] ?? []) > 0 || count($dayData['debts'] ?? []) > 0;
             if ($hasData) $class .= ' has-data';
             @endphp
 
             <div class="{{ $class }}"
                 @if($hasData)
                 style="cursor: pointer;"
-                onclick="showTransactions('{{ \Carbon\Carbon::parse($dayData['date'])->translatedFormat('d F Y') }}', {{ json_encode($dayData['transactions']) }}, {{ json_encode($dayData['notes'] ?? []) }})"
+                onclick="showTransactions('{{ \Carbon\Carbon::parse($dayData['date'])->translatedFormat('d F Y') }}', {{ json_encode($dayData['transactions']) }}, {{ json_encode($dayData['notes'] ?? []) }}, {{ json_encode($dayData['debts'] ?? []) }})"
                 @endif>
                 <div class="calendar-date-number">{{ $dayData['day'] }}</div>
 
@@ -413,6 +413,9 @@
                     @endif
                     @if(count($dayData['notes'] ?? []) > 0)
                     <div class="indicator-dot" style="background-color: #f59e0b;"></div>
+                    @endif
+                    @if(count($dayData['debts'] ?? []) > 0)
+                    <div class="indicator-dot" style="background-color: #a78bfa;"></div>
                     @endif
                 </div>
 
@@ -464,6 +467,10 @@
             <span>Ada Tagihan</span>
         </div>
         <div class="legend-item">
+            <div class="legend-dot" style="background-color: #a78bfa;"></div>
+            <span>Jatuh Tempo Hutang/Piutang</span>
+        </div>
+        <div class="legend-item">
             <div class="legend-circle"></div>
             <span>Hari Ini</span>
         </div>
@@ -491,7 +498,7 @@
 @endpush
 
 <script>
-    function showTransactions(dateFormatted, transactions, notes = []) {
+    function showTransactions(dateFormatted, transactions, notes = [], debts = []) {
         document.getElementById('calModalTitle').innerText = 'Aktivitas: ' + dateFormatted;
 
         let html = '';
@@ -525,6 +532,44 @@
             html += '<div style="margin-bottom: 1.5rem;"></div>';
         }
 
+        if (debts.length > 0) {
+            html += '<h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #a78bfa;">Hutang / Piutang</h4>';
+            debts.forEach(debt => {
+                const isPayable = debt.type === 'payable';
+                const typeText = isPayable ? 'Hutang ke' : 'Piutang dari';
+                const typeBadge = isPayable ? 
+                    '<span style="color: #fca5a5; font-size: 0.75rem; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.1); padding: 0.15rem 0.6rem; border-radius: 99px; font-weight: 600;">Hutang</span>' :
+                    '<span style="color: #60a5fa; font-size: 0.75rem; border: 1px solid rgba(59, 130, 246, 0.2); background: rgba(59, 130, 246, 0.1); padding: 0.15rem 0.6rem; border-radius: 99px; font-weight: 600;">Piutang</span>';
+                const statusBadge = debt.status === 'paid' ?
+                    '<span style="color: #10b981; font-size: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.1); padding: 0.15rem 0.6rem; border-radius: 99px; font-weight: 600;">Lunas</span>' :
+                    (debt.status === 'partially_paid' ?
+                        '<span style="color: #f59e0b; font-size: 0.75rem; border: 1px solid rgba(245, 158, 11, 0.2); background: rgba(245, 158, 11, 0.1); padding: 0.15rem 0.6rem; border-radius: 99px; font-weight: 600;">Dicicil</span>' :
+                        '<span style="color: #ef4444; font-size: 0.75rem; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.1); padding: 0.15rem 0.6rem; border-radius: 99px; font-weight: 600;">Belum Lunas</span>');
+                
+                const remaining = debt.amount - debt.amount_paid;
+                const remainingHtml = debt.status !== 'paid' ? 
+                    `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Sisa: Rp ${parseInt(remaining).toLocaleString('id-ID')}</div>` : 
+                    '';
+
+                html += `
+                <div class="cal-tx-item" style="border-left: 3px solid #a78bfa; padding: 1rem; background: rgba(167, 139, 250, 0.05); border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
+                        <div style="font-weight: 600; font-size: 1rem;">${typeText} ${debt.person_name}</div>
+                        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">${typeBadge} ${statusBadge}</div>
+                    </div>
+                    <div style="text-align: right; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                        <div style="font-weight: 700; color: #fff; font-size: 1rem;">
+                            Rp ${parseInt(debt.amount).toLocaleString('id-ID')}
+                        </div>
+                        ${remainingHtml}
+                        <a href="/debts" style="background: rgba(167, 139, 250, 0.1); border: 1px solid rgba(167, 139, 250, 0.2); color: #c084fc; padding: 0.3rem 0.75rem; border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 600; text-decoration: none; display: inline-block;">Detail Hutang &rarr;</a>
+                    </div>
+                </div>
+                `;
+            });
+            html += '<div style="margin-bottom: 1.5rem;"></div>';
+        }
+
         if (transactions.length > 0) {
             html += '<h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--text-muted);">Transaksi</h4>';
             transactions.forEach(tx => {
@@ -547,7 +592,7 @@
             });
         }
 
-        if (transactions.length === 0 && notes.length === 0) {
+        if (transactions.length === 0 && notes.length === 0 && debts.length === 0) {
             html = '<p style="color: var(--text-muted); text-align: center; padding: 1rem 0;">Tidak ada aktivitas.</p>';
         }
 
