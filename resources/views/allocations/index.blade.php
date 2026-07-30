@@ -119,7 +119,6 @@
 
                             <div style="margin-bottom: 1rem;">
                                 <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 600; padding-right: 3rem; {{ $isTabungan ? 'color: #60a5fa;' : '' }}">
-                                    @if($isTabungan) 💰 @endif
                                     {{ $item['category_name'] }}
                                 </h4>
                                 

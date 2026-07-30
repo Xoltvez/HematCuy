@@ -280,6 +280,11 @@
                 <select name="account" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
                     <option value="cash" style="background: #1a1a1a; color: white;">Tunai</option>
                     <option value="bank" style="background: #1a1a1a; color: white;">Bank/E-Wallet</option>
+                    @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                        @foreach(auth()->user()->accounts as $acc)
+                            <option value="{{ $acc->name }}" style="background: #1a1a1a; color: white;">{{ $acc->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
 
@@ -322,6 +327,11 @@
                 <select name="account" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: white;" required>
                     <option value="cash" style="background: #1a1a1a; color: white;">Tunai</option>
                     <option value="bank" style="background: #1a1a1a; color: white;">Bank/E-Wallet</option>
+                    @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                        @foreach(auth()->user()->accounts as $acc)
+                            <option value="{{ $acc->name }}" style="background: #1a1a1a; color: white;">{{ $acc->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             

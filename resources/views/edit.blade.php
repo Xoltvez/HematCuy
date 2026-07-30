@@ -105,6 +105,11 @@
                     <select id="account" name="account" required>
                         <option value="cash" {{ $transaction->account === 'cash' ? 'selected' : '' }}>Tunai (Dompet)</option>
                         <option value="bank" {{ $transaction->account === 'bank' ? 'selected' : '' }}>Bank / E-Wallet</option>
+                        @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                            @foreach(auth()->user()->accounts as $acc)
+                                <option value="{{ $acc->name }}" {{ $transaction->account === $acc->name ? 'selected' : '' }}>{{ $acc->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
             </div>

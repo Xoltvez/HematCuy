@@ -73,6 +73,11 @@
                                 <option value="cash">Tunai (Cash)</option>
                                 <option value="bank">Transfer Bank</option>
                                 <option value="ewallet">E-Wallet (Gopay/OVO/dll)</option>
+                                @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                                    @foreach(auth()->user()->accounts as $acc)
+                                        <option value="{{ $acc->name }}">{{ $acc->name }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div>

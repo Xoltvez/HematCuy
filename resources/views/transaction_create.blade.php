@@ -105,6 +105,11 @@
                     <select id="account" name="account" required>
                         <option value="cash">Tunai (Dompet)</option>
                         <option value="bank">Bank / E-Wallet</option>
+                        @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                            @foreach(auth()->user()->accounts as $acc)
+                                <option value="{{ $acc->name }}">{{ $acc->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
             </div>

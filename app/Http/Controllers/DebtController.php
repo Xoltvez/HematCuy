@@ -25,23 +25,25 @@ class DebtController extends Controller
 
     public function store(Request $request)
     {
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
         $request->validate([
             'type' => 'required|in:payable,receivable',
             'person_name' => 'required|string|max:255',
             'amount' => 'required|numeric|min:1',
             'due_date' => 'nullable|date',
-            'account' => 'required|in:cash,bank'
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)]
         ]);
 
         try {
             DB::beginTransaction();
 
-            $user = auth()->user();
-            
             if ($request->type === 'receivable') {
                 $currentBalance = $user->getAccountBalance($request->account);
                 if ($request->amount > $currentBalance) {
-                    return back()->with('error', 'Saldo ' . ($request->account == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi untuk memberikan piutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                    $accLabel = $request->account == 'cash' ? 'Tunai' : ($request->account == 'bank' ? 'Bank/E-Wallet' : $request->account);
+                    return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi untuk memberikan piutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
                 }
             }
             
@@ -82,18 +84,21 @@ class DebtController extends Controller
             abort(403);
         }
 
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
         $request->validate([
             'amount' => 'required|numeric|min:1',
-            'account' => 'required|in:cash,bank'
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)]
         ]);
 
         $amountToPay = min($request->amount, $debt->amount - $debt->amount_paid);
 
         if ($debt->type === 'payable') {
-            $user = auth()->user();
             $currentBalance = $user->getAccountBalance($request->account);
             if ($amountToPay > $currentBalance) {
-                return back()->with('error', 'Saldo ' . ($request->account == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi untuk membayar hutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                $accLabel = $request->account == 'cash' ? 'Tunai' : ($request->account == 'bank' ? 'Bank/E-Wallet' : $request->account);
+                return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi untuk membayar hutang! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
             }
         }
 

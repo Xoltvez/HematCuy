@@ -31,11 +31,11 @@ class AllocationController extends Controller
             $predictedTotalSpent = $burnRate * $daysInMonth;
             
             $status = 'safe'; // safe, warning, danger
-            $insight = 'Pengeluaran aman dan terkendali. 👍';
+            $insight = 'Pengeluaran aman dan terkendali.';
             
             if ($percentage >= 100) {
                 $status = 'danger';
-                $insight = 'Budget sudah habis! 🛑 Hentikan pengeluaran di pos ini.';
+                $insight = 'Budget sudah habis! Hentikan pengeluaran di pos ini.';
             } else if ($percentage >= 80) {
                 $status = 'warning';
                 $insight = 'Awas! Budget sudah menipis (' . $percentage . '% terpakai).';

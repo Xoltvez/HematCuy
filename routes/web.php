@@ -97,6 +97,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/profil', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::post('/pengaturan/reset-akun', [App\Http\Controllers\SettingsController::class, 'resetAccount'])->name('settings.reset');
     Route::post('/settings/notifications', [App\Http\Controllers\SettingsController::class, 'updateNotifications'])->name('settings.notifications');
+    Route::post('/pengaturan/sumber-dana', [App\Http\Controllers\SettingsController::class, 'storeAccount'])->name('settings.accounts.store');
+    Route::delete('/pengaturan/sumber-dana/{account}', [App\Http\Controllers\SettingsController::class, 'destroyAccount'])->name('settings.accounts.destroy');
     Route::get('/panduan', function() { return view('guide.index'); })->name('guide.index');
 
     // Helper Route untuk Hosting

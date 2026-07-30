@@ -172,11 +172,16 @@
                 <input type="text" id="payCategory" name="category" required value="Pembayaran Tagihan" style="border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); margin-top: 0.25rem; width: 100%;">
             </div>
             
-            <div style="margin-bottom: 1.5rem;">
+            <div style="margin-top: 1.5rem;">
                 <label for="payAccount" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">Sumber Dana</label>
                 <select id="payAccount" name="account" required style="width: 100%; margin-top: 0.25rem; border-color: rgba(255,255,255,0.1); background: var(--bg-card); color: var(--text-main);">
                     <option value="bank">🏦 Saldo Bank</option>
                     <option value="cash">💵 Uang Tunai</option>
+                    @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                        @foreach(auth()->user()->accounts as $acc)
+                            <option value="{{ $acc->name }}">{{ $acc->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             

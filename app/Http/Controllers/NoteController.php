@@ -114,10 +114,13 @@ class NoteController extends Controller
             return back()->with('error', 'Catatan ini sudah lunas.');
         }
 
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
         $request->validate([
             'type' => 'required|in:income,expense',
             'category' => 'required|string',
-            'account' => 'required|in:cash,bank',
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)],
         ]);
 
         // Create transaction

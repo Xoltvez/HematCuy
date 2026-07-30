@@ -208,6 +208,75 @@
                 </div>
             </div>
         </div>
+        <!-- Accordion Item: Sumber Dana -->
+        <div class="accordion-item" id="acc-sumber-dana">
+            <button class="accordion-header" aria-expanded="false">
+                <div class="acc-title-group">
+                    <div class="acc-icon green">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    </div>
+                    <span>Sumber Dana (Rekening/Dompet)</span>
+                </div>
+                <div class="acc-chevron">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-content-inner">
+                    <!-- Form Tambah Sumber Dana -->
+                    <form action="{{ route('settings.accounts.store') }}" method="POST" style="margin-bottom: 2rem;">
+                        @csrf
+                        <div style="margin-bottom: 1rem;">
+                            <label class="settings-label">Nama Sumber Dana Baru</label>
+                            <input type="text" name="name" class="form-control settings-input" placeholder="Contoh: ShopeePay, DANA, Bank Mandiri..." required>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="settings-label">Kategori Tipe</label>
+                            <select name="type" class="settings-input" required style="background: rgba(15, 23, 42, 0.6); color: #fff;">
+                                <option value="bank" style="background: #1e293b;">Digital / Bank / E-Wallet</option>
+                                <option value="cash" style="background: #1e293b;">Fisik / Tunai / Dompet</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-weight: 600; border-radius: var(--radius-md); background: var(--color-primary); color: #fff; border: none;">Tambah Sumber Dana</button>
+                    </form>
+
+                    <!-- Daftar Sumber Dana -->
+                    <h4 style="font-size: 0.9rem; color: #fff; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; font-weight: 600;">Sumber Dana Aktif</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <!-- Default Sources -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">Tunai (Dompet)</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Bawaan Sistem</div>
+                            </div>
+                            <span style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--text-muted);">Default</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">Bank / E-Wallet</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Bawaan Sistem</div>
+                            </div>
+                            <span style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--text-muted);">Default</span>
+                        </div>
+
+                        <!-- User Custom Sources -->
+                        @foreach(auth()->user()->accounts as $acc)
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">{{ $acc->name }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $acc->type === 'cash' ? 'Tipe: Tunai' : 'Tipe: Bank' }}</div>
+                            </div>
+                            <form action="{{ route('settings.accounts.destroy', $acc->id) }}" method="POST" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: none; border: none; color: #fb7185; cursor: pointer; font-size: 0.85rem; font-weight: 600;" onclick="return confirm('Hapus sumber dana ini?')">Hapus</button>
+                            </form>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Accordion Item: Keamanan Akun -->
         <div class="accordion-item" id="acc-keamanan">
             <button class="accordion-header" aria-expanded="false">

@@ -41,6 +41,11 @@
                 <div class="dropdown-item active" data-value="total" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; transition: all 0.2s;">Total Saldo</div>
                 <div class="dropdown-item" data-value="cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; color: var(--text-muted); transition: all 0.2s;">Saldo Tunai</div>
                 <div class="dropdown-item" data-value="bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; color: var(--text-muted); transition: all 0.2s;">Saldo Bank</div>
+                @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                    @foreach(auth()->user()->accounts as $acc)
+                        <div class="dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; color: var(--text-muted); transition: all 0.2s;">Saldo {{ $acc->name }}</div>
+                    @endforeach
+                @endif
             </div>
         </div>
         <div style="margin-bottom: 1.5rem;">
@@ -49,6 +54,11 @@
                 data-total="Rp {{ number_format($balanceTotal, 0, ',', '.') }}" 
                 data-cash="Rp {{ number_format($balanceCash, 0, ',', '.') }}" 
                 data-bank="Rp {{ number_format($balanceBank, 0, ',', '.') }}" 
+                @if(auth()->check() && auth()->user()->accounts->count() > 0)
+                    @foreach(auth()->user()->accounts as $acc)
+                        data-custom_{{ \Illuminate\Support\Str::slug($acc->name) }}="Rp {{ number_format(auth()->user()->getAccountBalance($acc->name), 0, ',', '.') }}"
+                    @endforeach
+                @endif
                 style="font-size: 2rem; font-weight: 700; color: #fff; letter-spacing: -0.5px;">Rp {{ number_format($balanceTotal, 0, ',', '.') }}</div>
         </div>
         <a href="{{ route('transactions.create') }}" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 0.75rem; text-decoration: none;">

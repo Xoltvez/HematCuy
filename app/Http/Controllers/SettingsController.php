@@ -92,4 +92,36 @@ class SettingsController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mereset akun. Silakan coba lagi.');
         }
     }
+
+    public function storeAccount(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'in:cash,bank'],
+        ]);
+
+        auth()->user()->accounts()->create([
+            'name' => $request->name,
+            'type' => $request->type,
+        ]);
+
+        return redirect()->back()->with('success', 'Sumber dana baru berhasil ditambahkan.');
+    }
+
+    public function destroyAccount($id)
+    {
+        $account = auth()->user()->accounts()->findOrFail($id);
+        
+        $defaultFallback = $account->type === 'cash' ? 'cash' : 'bank';
+        
+        auth()->user()->transactions()->where('account', $account->name)->update(['account' => $defaultFallback]);
+        auth()->user()->debts()->where('account', $account->name)->update(['account' => $defaultFallback]);
+        
+        $debtIds = auth()->user()->debts()->pluck('id');
+        \App\Models\DebtInstallment::whereIn('debt_id', $debtIds)->where('account', $account->name)->update(['account' => $defaultFallback]);
+
+        $account->delete();
+
+        return redirect()->back()->with('success', 'Sumber dana berhasil dihapus.');
+    }
 }

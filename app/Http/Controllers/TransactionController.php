@@ -43,9 +43,14 @@ class TransactionController extends Controller
         // Exclude Tabungan Ekstra completely from all balance calculations
         $balanceExpenseTxs = $allTransactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra']);
 
+        $customCashAccounts = $user->accounts()->where('type', 'cash')->pluck('name')->toArray();
+        $customBankAccounts = $user->accounts()->where('type', 'bank')->pluck('name')->toArray();
+        $cashAccounts = array_merge(['cash'], $customCashAccounts);
+        $bankAccounts = array_merge(['bank'], $customBankAccounts);
+
         $balanceTotal = $realIncomeTxs->sum('amount') - $balanceExpenseTxs->sum('amount');
-        $balanceCash = $realIncomeTxs->where('account', 'cash')->sum('amount') - $balanceExpenseTxs->where('account', 'cash')->sum('amount');
-        $balanceBank = $realIncomeTxs->where('account', 'bank')->sum('amount') - $balanceExpenseTxs->where('account', 'bank')->sum('amount');
+        $balanceCash = $realIncomeTxs->whereIn('account', $cashAccounts)->sum('amount') - $balanceExpenseTxs->whereIn('account', $cashAccounts)->sum('amount');
+        $balanceBank = $realIncomeTxs->whereIn('account', $bankAccounts)->sum('amount') - $balanceExpenseTxs->whereIn('account', $bankAccounts)->sum('amount');
 
         // Recent Activity (Top 5)
         $recentTransactions = $allTransactions->whereNotIn('category', ['Tabungan Ekstra'])->take(5);
@@ -168,11 +173,17 @@ class TransactionController extends Controller
         $totalIncome = $transactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
-        $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
-                     - $transactions->where('account', 'cash')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $user = auth()->user();
+        $customCashAccounts = $user->accounts()->where('type', 'cash')->pluck('name')->toArray();
+        $customBankAccounts = $user->accounts()->where('type', 'bank')->pluck('name')->toArray();
+        $cashAccounts = array_merge(['cash'], $customCashAccounts);
+        $bankAccounts = array_merge(['bank'], $customBankAccounts);
+
+        $balanceCash = $transactions->whereIn('account', $cashAccounts)->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->whereIn('account', $cashAccounts)->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
                      
-        $balanceBank = $transactions->where('account', 'bank')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
-                     - $transactions->where('account', 'bank')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $balanceBank = $transactions->whereIn('account', $bankAccounts)->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->whereIn('account', $bankAccounts)->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
         
         $expensesByCategory = $transactions->where('type', 'expense')
             ->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])
@@ -220,11 +231,17 @@ class TransactionController extends Controller
         $totalIncome = $transactions->where('type', 'income')->whereNotIn('category', ['Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         $totalExpense = $transactions->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra', 'Hutang/Piutang'])->sum('amount');
         
-        $balanceCash = $transactions->where('account', 'cash')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
-                     - $transactions->where('account', 'cash')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $user = auth()->user();
+        $customCashAccounts = $user->accounts()->where('type', 'cash')->pluck('name')->toArray();
+        $customBankAccounts = $user->accounts()->where('type', 'bank')->pluck('name')->toArray();
+        $cashAccounts = array_merge(['cash'], $customCashAccounts);
+        $bankAccounts = array_merge(['bank'], $customBankAccounts);
+
+        $balanceCash = $transactions->whereIn('account', $cashAccounts)->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->whereIn('account', $cashAccounts)->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
                      
-        $balanceBank = $transactions->where('account', 'bank')->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
-                     - $transactions->where('account', 'bank')->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
+        $balanceBank = $transactions->whereIn('account', $bankAccounts)->where('type', 'income')->where('category', '!=', 'Tabungan Ekstra')->sum('amount') 
+                     - $transactions->whereIn('account', $bankAccounts)->where('type', 'expense')->whereNotIn('category', ['Pembelian Wishlist', 'Tabungan Ekstra'])->sum('amount');
 
         $data = [
             'transactions' => $transactions,
@@ -262,24 +279,27 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:income,expense',
-            'account' => 'required|in:cash,bank',
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)],
             'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'nullable',
         ]);
 
-        $validated['user_id'] = auth()->id();
-        $user = auth()->user();
+        $validated['user_id'] = $user->id;
 
         if ($validated['type'] === 'expense') {
             $currentBalance = $user->getAccountBalance($validated['account']);
             if ($validated['amount'] > $currentBalance) {
-                return back()->with('error', 'Saldo ' . ($validated['account'] == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                $accLabel = $validated['account'] == 'cash' ? 'Tunai' : ($validated['account'] == 'bank' ? 'Bank/E-Wallet' : $validated['account']);
+                return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi! Sisa saldo: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
             }
         }
 
@@ -346,22 +366,24 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
+        $user = auth()->user();
+        $allowedAccounts = array_merge(['cash', 'bank'], $user->accounts()->pluck('name')->toArray());
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:income,expense',
-            'account' => 'required|in:cash,bank',
+            'account' => ['required', \Illuminate\Validation\Rule::in($allowedAccounts)],
             'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'nullable',
         ]);
 
-        if ($transaction->user_id !== auth()->id()) {
+        if ($transaction->user_id !== $user->id) {
             abort(403);
         }
 
-        $user = auth()->user();
         if ($validated['type'] === 'expense') {
             $currentBalance = $user->getAccountBalance($validated['account']);
             
@@ -372,7 +394,8 @@ class TransactionController extends Controller
             }
             
             if ($validated['amount'] > $currentBalance) {
-                return back()->with('error', 'Saldo ' . ($validated['account'] == 'cash' ? 'Tunai' : 'Bank/E-Wallet') . ' Anda tidak mencukupi! Maksimal yang bisa dikeluarkan: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
+                $accLabel = $validated['account'] == 'cash' ? 'Tunai' : ($validated['account'] == 'bank' ? 'Bank/E-Wallet' : $validated['account']);
+                return back()->with('error', 'Saldo ' . $accLabel . ' Anda tidak mencukupi! Maksimal yang bisa dikeluarkan: Rp ' . number_format($currentBalance, 0, ',', '.'))->withInput();
             }
         }
 
