@@ -8,10 +8,10 @@
             <h2 style="margin: 0; font-size: 1.75rem; font-weight: 700; color: #ffffff;">Catat Transaksi</h2>
             <p style="color: var(--text-muted); margin-top: 0.25rem; font-size: 0.95rem; margin-bottom: 0;">Catat pemasukan atau pengeluaran baru Anda</p>
         </div>
-        <a href="{{ route('settings.index') }}?tab=sumber-dana" class="btn" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.85rem; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+        <a href="{{ route('settings.index') }}?tab=sumber-dana" style="background: #3b82f6; color: #fff; border-radius: 8px; padding: 0.6rem 1.2rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; border: none; cursor: pointer; width: max-content; flex-shrink: 0; text-decoration: none; transition: all 0.2s ease;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-                <line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
             Tambah Sumber Dana
         </a>
