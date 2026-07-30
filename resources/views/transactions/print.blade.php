@@ -109,7 +109,15 @@
                         @endif
                     </td>
                     <td>{{ $tx->category ?? 'Lainnya' }}</td>
-                    <td>{{ $tx->account === 'cash' ? 'Tunai' : 'Rekening Bank' }}</td>
+                    <td>
+                        @if($tx->account === 'cash')
+                            Tunai
+                        @elseif($tx->account === 'bank')
+                            Rekening Bank
+                        @else
+                            {{ $tx->account }}
+                        @endif
+                    </td>
                     <td>{{ $tx->title }}</td>
                     <td style="text-align: right;">{{ number_format($tx->amount, 0, ',', '.') }}</td>
                 </tr>

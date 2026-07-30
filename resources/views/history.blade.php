@@ -109,9 +109,20 @@
                             <span class="category-badge type-badge {{ $transaction->type === 'income' ? 'badge-income' : 'badge-expense' }}">
                                 {{ $transaction->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
                             </span>
-                            <span class="category-badge" style="background-color: rgba(96, 165, 250, 0.2); color: #60a5fa;">
-                                {{ $transaction->account === 'bank' ? '🏦 Bank' : '💵 Tunai' }}
-                            </span>
+                             <span class="category-badge" style="background-color: rgba(96, 165, 250, 0.2); color: #60a5fa;">
+                                 @php
+                                     $isBank = false;
+                                     if ($transaction->account === 'bank') {
+                                         $isBank = true;
+                                     } elseif (auth()->check()) {
+                                         $userAcc = auth()->user()->accounts->where('name', $transaction->account)->first();
+                                         if ($userAcc && $userAcc->type === 'bank') {
+                                             $isBank = true;
+                                         }
+                                     }
+                                 @endphp
+                                 {{ $isBank ? '🏦 ' . ($transaction->account === 'bank' ? 'Bank' : $transaction->account) : '💵 ' . ($transaction->account === 'cash' ? 'Tunai' : $transaction->account) }}
+                             </span>
                             @if($transaction->category)
                                 <span class="category-badge">{{ $transaction->category }}</span>
                             @endif
