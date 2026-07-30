@@ -250,27 +250,29 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
         
         <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem; position: relative;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-                    </div>
-                    <div id="cashDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); user-select: none;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                </div>
+                
+                <div style="position: relative; display: inline-block;">
+                    <div id="cashDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; margin-left: -0.4rem; border-radius: var(--radius-sm); user-select: none;">
                         <span id="cashDropdownLabel">Saldo Tunai</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </div>
-                </div>
-                
-                <div id="cashDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 3.5rem; left: 1.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);">
-                    <div class="cash-dropdown-item active" data-value="total_cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Tunai</div>
-                    <div class="cash-dropdown-item" data-value="cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Tunai Utama</div>
-                    @if(auth()->check() && auth()->user()->accounts->where('type', 'cash')->count() > 0)
-                        @foreach(auth()->user()->accounts->where('type', 'cash') as $acc)
-                            <div class="cash-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
-                        @endforeach
-                    @endif
+                    
+                    <div id="cashDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 100%; left: -0.4rem; background: #121214; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);">
+                        <div class="cash-dropdown-item active" data-value="total_cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Tunai</div>
+                        <div class="cash-dropdown-item" data-value="cash" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Tunai Utama</div>
+                        @if(auth()->check() && auth()->user()->accounts->where('type', 'cash')->count() > 0)
+                            @foreach(auth()->user()->accounts->where('type', 'cash') as $acc)
+                                <div class="cash-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
             </div>
+            
             <div id="cashBalanceAmount" class="card-info-amount" 
                 data-original="Rp {{ number_format($balanceCash, 0, ',', '.') }}" 
                 data-total_cash="Rp {{ number_format($balanceCash, 0, ',', '.') }}" 
@@ -284,25 +286,26 @@
         </div>
         
         <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem; position: relative;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(167, 139, 250, 0.1); color: #a78bfa; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-                    </div>
-                    <div id="bankDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); user-select: none;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(167, 139, 250, 0.1); color: #a78bfa; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                </div>
+                
+                <div style="position: relative; display: inline-block;">
+                    <div id="bankDropdownTrigger" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer; padding: 0.2rem 0.4rem; margin-left: -0.4rem; border-radius: var(--radius-sm); user-select: none;">
                         <span id="bankDropdownLabel">Saldo Bank</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </div>
-                </div>
-                
-                <div id="bankDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 3.5rem; left: 1.5rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);">
-                    <div class="bank-dropdown-item active" data-value="total_bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Bank</div>
-                    <div class="bank-dropdown-item" data-value="bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Bank Utama</div>
-                    @if(auth()->check() && auth()->user()->accounts->where('type', 'bank')->count() > 0)
-                        @foreach(auth()->user()->accounts->where('type', 'bank') as $acc)
-                            <div class="bank-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
-                        @endforeach
-                    @endif
+                    
+                    <div id="bankDropdownMenu" class="custom-scrollbar" style="position: absolute; top: 100%; left: -0.4rem; background: #121214; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-md); padding: 0.5rem; display: none; flex-direction: column; gap: 0.25rem; min-width: 160px; max-height: 150px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);">
+                        <div class="bank-dropdown-item active" data-value="total_bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">Total Bank</div>
+                        <div class="bank-dropdown-item" data-value="bank" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">Bank Utama</div>
+                        @if(auth()->check() && auth()->user()->accounts->where('type', 'bank')->count() > 0)
+                            @foreach(auth()->user()->accounts->where('type', 'bank') as $acc)
+                                <div class="bank-dropdown-item" data-value="custom_{{ \Illuminate\Support\Str::slug($acc->name) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s;">{{ $acc->name }}</div>
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
             </div>
             <div id="bankBalanceAmount" class="card-info-amount" 
