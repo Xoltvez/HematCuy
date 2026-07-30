@@ -247,7 +247,7 @@
     </div>
 
     <!-- Summary Cards -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; position: relative; z-index: 20;">
         
         <div style="background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 1.5rem; position: relative;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
