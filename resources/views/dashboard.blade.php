@@ -28,7 +28,7 @@
 <div class="animate-fade-in-up" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     
     <!-- Balance Card -->
-    <div class="premium-glow-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.45) 0%, rgba(139, 92, 246, 0.35) 100%); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: var(--radius-xl); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+    <div class="premium-glow-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.45) 0%, rgba(59, 130, 246, 0.2) 100%); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: var(--radius-xl); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
         
         <div class="custom-dropdown" style="position: relative; margin-bottom: 1rem;">
             <div id="balanceDropdownTrigger" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; cursor: pointer; padding: 0.3rem 0.6rem; margin-left: -0.6rem; border-radius: var(--radius-md); transition: all 0.2s;">
