@@ -38,6 +38,27 @@
     .swal2-icon.swal2-error [class^=swal2-x-mark-line] {
         background-color: #fb7185 !important;
     }
+    .hematcuy-swal-popup {
+        background: rgba(15, 23, 42, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+    }
+    .hematcuy-swal-title {
+        color: #f8fafc !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        padding-top: 1rem !important;
+    }
+    .hematcuy-swal-text {
+        color: #94a3b8 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -78,6 +99,33 @@
                 icon: 'error',
                 title: "{!! addslashes($errors->first()) !!}"
             });
+        @endif
+
+        @if(session('show_fill_balance'))
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'Isi Saldo Awal?',
+                    text: 'Selamat datang di HematCuy! Apakah Anda ingin mengisi saldo awal Anda sekarang?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3b82f6',
+                    cancelButtonColor: 'rgba(255, 255, 255, 0.1)',
+                    confirmButtonText: 'Ya, Isi Saldo',
+                    cancelButtonText: 'Nanti Saja',
+                    background: 'rgba(15, 23, 42, 0.95)',
+                    color: '#f8fafc',
+                    backdrop: 'rgba(15, 23, 42, 0.4)',
+                    customClass: {
+                        popup: 'hematcuy-swal-popup',
+                        title: 'hematcuy-swal-title',
+                        htmlContainer: 'hematcuy-swal-text'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('transactions.create') }}";
+                    }
+                });
+            }, 800);
         @endif
 
         // Expose Toast globally

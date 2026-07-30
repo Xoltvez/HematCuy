@@ -150,7 +150,9 @@ class AuthController extends Controller
         Auth::login($user);
         session()->forget('otp_email');
 
-        return redirect()->intended(route('dashboard'))->with('success', 'Pendaftaran berhasil, selamat datang!');
+        return redirect()->intended(route('dashboard'))
+            ->with('success', 'Pendaftaran berhasil, selamat datang!')
+            ->with('show_fill_balance', true);
     }
 
     public function resendOtp()
